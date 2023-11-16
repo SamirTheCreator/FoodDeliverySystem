@@ -49,8 +49,6 @@ Linux Desktop Application. OS Project
 - [ ] Library for client-side app (client-side components' implementation)
 - [ ] Add GUI to client-side app (GTK3 library implementation) 
 - [ ] Dark out here...
-- [ ] Write server-side app with DB (server-side components' implementation to handle requests from client)
-- [ ] Also dark out here...
 
 ### Asad
 
