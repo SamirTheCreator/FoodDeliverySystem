@@ -4,7 +4,7 @@ Linux Desktop Application. OS Project
  
 ### Samir
 
-- [ ] Mercury
+- [x] Fix issue
 - [x] Venus
 - [x] Earth (Orbit/Moon)
 - [x] Mars
