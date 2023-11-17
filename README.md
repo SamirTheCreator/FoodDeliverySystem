@@ -52,15 +52,15 @@ Linux Desktop Application. OS Project
 
 ### Asad
 
-- [ ] Mercury
-- [x] Venus
-- [x] Earth (Orbit/Moon)
-- [x] Mars
-- [ ] Jupiter
-- [ ] Saturn
-- [ ] Uranus
-- [ ] Neptune
-- [ ] Comet Haley
+- [x] Git, commit, push, merge request
+- [x] High level design of a database 
+- [x] More detailed design of a database
+- [ ] Read chapters of a book that is related to database design 
+- [ ] Determine data type/structures of attributes of tables
+- [ ] Have a schema of a database in natural language
+- [ ] Build and test database
+- [x] Scrape web to collect data needed for database
+- [ ] Clean the dataset and fill database with scraped data
 
 ### Aziz
 
