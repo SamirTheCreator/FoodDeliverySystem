@@ -57,8 +57,9 @@ Linux Desktop Application. OS Project
 - [x] More detailed design of a database
 - [ ] Read chapters of a book that is related to database design 
 - [ ] Determine data type/structures of attributes of tables
-- [ ] Have a schema of a database in natural language
-- [ ] Build and test database
+- [x] Draw visual database schema in Figma
+- [x] Build database v0.1.0 in SQL
+- [ ] Test database
 - [x] Scrape web to collect data needed for database
 - [ ] Clean the dataset and fill database with scraped data
 
