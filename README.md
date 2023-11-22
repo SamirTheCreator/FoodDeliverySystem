@@ -69,7 +69,7 @@ Linux Desktop Application. OS Project
 - [x] Venus
 - [x] Earth (Orbit/Moon)
 - [x] Mars
-- [ ] Jupiter
+- [x] Jupyter
 - [ ] Saturn
 - [ ] Uranus
 - [ ] Neptune
