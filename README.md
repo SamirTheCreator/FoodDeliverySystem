@@ -29,7 +29,7 @@ Linux Desktop Application. OS Project
 ### Mukhabbat
 
 - [x] Git Essentials (branch, issue, commit, pull request)
-- [ ] Client/Server app in C (focus on data transmission)
+- [x] Client/Server app in C (focus on data transmission)
 - [ ] Multithreaded Client/Server app in C (threads in theory and practice)
 - [ ] C with MySQL (querying DB in C)
 - [ ] C with Glade (build sample registration form)
