@@ -1,4 +1,4 @@
-/* server.c -- a C program that that uses socket programming to create a server process */
+/* server.c -- a C program that that uses socket programming to create a server sockets */
 
 #include <stdio.h>
 #include <stdlib.h>		 // for EXIT_FAILURE
