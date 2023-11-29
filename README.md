@@ -29,8 +29,8 @@ Linux Desktop Application. OS Project
 ### Mukhabbat
 
 - [x] Git Essentials (branch, issue, commit, pull request)
-- [ ] Client/Server app in C (focus on data transmission)
-- [ ] Multithreaded Client/Server app in C (threads in theory and practice)
+- [x] Client/Server app in C (focus on data transmission)
+- [x] Multithreaded Client/Server app in C (threads in theory and practice)
 - [ ] C with MySQL (querying DB in C)
 - [ ] C with Glade (build sample registration form)
 - [ ] UX/UI (Userflow for three type of users/Minimal design in Figma or on paper)
