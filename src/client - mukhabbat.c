@@ -1,4 +1,4 @@
-/* server.c -- a C program that uses socket programming to create a client socket */
+/* client.c -- a C program that uses socket programming to create a client socket */
 
 #include <stdio.h>
 #include <stdlib.h>		 // for EXIT_FAILURE and EXIT_SUCCESS 
@@ -23,14 +23,13 @@ int main(void)
 	
 	if(sock < 0)
 	{
-		puts("Creation of the client socket is failed. Goodbye.");
+		puts("Creation of the client socket failed. Goodbye.");
 		return -1;
 	}
 	puts("Client socket created!");
 	
 	/* Defining the socket options */
 	
-	struct sockaddr_in address;		// defined in netinet/in.h
 	struct sockaddr_in serv_addr;
 	memset(&serv_addr, '0', sizeof(serv_addr)); 
 	serv_addr.sin_family = AF_INET;
@@ -51,7 +50,7 @@ int main(void)
 	
 	if (ret_result < 0)
 	{
-		puts("Connection on the socket for communication with server is faild");
+		puts("Connection on the socket for communication with server faild");
       	return -1;
     }
 	puts("Connected to the server on port 7777");
@@ -105,7 +104,7 @@ int main(void)
 	return 0;
 }
 
-/* get input from the client */
+/* get input */
 
 char * s_gets(char * st, int size) 
 {

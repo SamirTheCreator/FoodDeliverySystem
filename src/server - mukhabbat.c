@@ -23,7 +23,7 @@ int main(void)
 	
 	if(server_fd < 0)
 	{
-		puts("Creation of the server socket is failed. Goodbye.");
+		puts("Creation of the server socket failed. Goodbye.");
 		exit(EXIT_FAILURE);
 	}
 	puts("Server socket created!");
@@ -51,7 +51,7 @@ int main(void)
 	
 	if(ret_val < 0 )
 	{
-		puts("Binding the socket to the address and port number is failed. Goodbye.");
+		puts("Binding the socket to the address and port number failed. Goodbye.");
 		exit(EXIT_FAILURE);
 	}
 	printf("Bound to the port number %d\n", PORT);
@@ -63,7 +63,7 @@ int main(void)
 	
 	if(ret_val < 0)
 	{
-		puts("Listening on the socket for connection is failed. Goodbye.");
+		puts("Listening on the socket for connection failed. Goodbye.");
 		exit(EXIT_FAILURE);
 	}
 	printf("Listening client on PORT %d\n", PORT);
@@ -76,7 +76,7 @@ int main(void)
 	
 	if(new_socket < 0)
 	{
-		puts("Accepting a new connection is failed. Goodbye.");
+		puts("Accepting a new connection failed. Goodbye.");
 		exit(EXIT_FAILURE);
 	}
 	puts("Server accepted a new connection on PORT 7777");
@@ -134,7 +134,7 @@ int main(void)
 	return 0;
 }
 
-/* get input from the client */
+/* get input */
 
 char * s_gets(char * st, int size) 
 {
