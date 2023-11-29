@@ -30,7 +30,7 @@ Linux Desktop Application. OS Project
 
 - [x] Git Essentials (branch, issue, commit, pull request)
 - [x] Client/Server app in C (focus on data transmission)
-- [ ] Multithreaded Client/Server app in C (threads in theory and practice)
+- [x] Multithreaded Client/Server app in C (threads in theory and practice)
 - [ ] C with MySQL (querying DB in C)
 - [ ] C with Glade (build sample registration form)
 - [ ] UX/UI (Userflow for three type of users/Minimal design in Figma or on paper)
