@@ -6,22 +6,13 @@ CREATE TABLE `user` (
     password VARCHAR(255) -- Stored as a hash
 );
 
--- Address Table
-CREATE TABLE address (
-    address_id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    address TEXT,
-    FOREIGN KEY (user_id) REFERENCES `user`(user_id) ON DELETE CASCADE
-);
-
 -- Restaurant Table
 CREATE TABLE restaurant (
     restaurant_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255),
     phone_number VARCHAR(20),
     rating FLOAT,
-    address_id INT,
-    FOREIGN KEY (address_id) REFERENCES address(address_id) ON DELETE SET NULL
+    address TEXT
 );
 
 -- Category Table
@@ -63,13 +54,12 @@ CREATE TABLE `order` (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
     restaurant_id INT,
-    address_id INT,
+    address TEXT,
     dasher_id INT,
     date DATETIME,
     order_status ENUM('Placed', 'Preparing', 'Ready for delivery', 'Out for delivery', 'Delivered') DEFAULT 'Placed',
     FOREIGN KEY (user_id) REFERENCES `user`(user_id) ON DELETE SET NULL,
     FOREIGN KEY (restaurant_id) REFERENCES restaurant(restaurant_id) ON DELETE SET NULL,
-    FOREIGN KEY (address_id) REFERENCES address(address_id) ON DELETE SET NULL,
     FOREIGN KEY (dasher_id) REFERENCES dasher(dasher_id) ON DELETE SET NULL
 );
 
