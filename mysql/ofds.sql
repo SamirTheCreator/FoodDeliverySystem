@@ -6,6 +6,7 @@ CREATE TABLE `customer` (
     phone_number VARCHAR(20) UNIQUE,
     email VARCHAR(255) UNIQUE,
     password VARCHAR(255) -- Stored as a hash
+    address VARCHAR(255)
 );
 
 -- Restaurant Table
@@ -13,7 +14,7 @@ CREATE TABLE restaurant (
     restaurant_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(255),
     phone_number VARCHAR(20),
-    address TEXT,
+    address VARCHAR(255),
     region VARCHAR(255),
     image_path VARCHAR(255)
 );
@@ -44,7 +45,6 @@ CREATE TABLE `order` (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     customer_id INT,
     restaurant_id INT,
-    address TEXT,
     dasher_id INT,
     date DATETIME,
     order_status ENUM('Placed', 'Preparing', 'Ready for delivery', 'Out for delivery', 'Delivered') DEFAULT 'Placed',
