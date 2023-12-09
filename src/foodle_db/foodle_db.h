@@ -3,6 +3,11 @@
 
 #include "../foodle_types/foodle_types.h"
 
+#define DB_HOST "localhost"
+#define DB_USER "root"
+#define DB_PASS "password"
+#define DB_NAME "Foodle_DB"
+
 void foodle_db_dasher_save(char *name, char *address, char *phone, char *email, char *car_model, char *car_color, char *car_plate);
 foodle_dasher_t foodle_db_dasher_get_byid(int id);
 foodle_dasher_t foodle_db_dasher_get_byname(char *name);
