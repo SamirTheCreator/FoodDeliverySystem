@@ -1,11 +1,13 @@
 START TRANSACTION;
-TRUNCATE TABLE `customer`;
-TRUNCATE TABLE restaurant;
-TRUNCATE TABLE dasher;
-TRUNCATE TABLE menu;
-TRUNCATE TABLE `order`;
-TRUNCATE TABLE order_meal;
 
+SET FOREIGN_KEY_CHECKS = 0;
+DELETE FROM order_meal;
+DELETE FROM `order`;
+DELETE FROM customer;
+DELETE FROM menu;
+DELETE FROM dasher;
+DELETE FROM restaurant;
+SET FOREIGN_KEY_CHECKS = 1;
 
 
 INSERT INTO customer (name, phone_number, email, password, address) VALUES
