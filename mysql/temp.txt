@@ -109,3 +109,13 @@ CREATE TABLE order_meal (
     FOREIGN KEY (menu_id, item_name, item_price) REFERENCES menu(menu_id, item_name, item_price) ON DELETE CASCADE,
     PRIMARY KEY (order_id, meal_id)
 );
+
+
+CREATE TABLE rest_menu (
+    rest_id PRIMARY KEY,
+    menu_id PRIMARY KEY,
+
+    FOREIGN KEY (rest_id) REFERENCES restaurant(restaurant_id) ON DELETE CASCADE,
+    FOREIGN KEY (menu_id) REFERENCES restaurant(menu_id) ON DELETE CASCADE,
+
+)

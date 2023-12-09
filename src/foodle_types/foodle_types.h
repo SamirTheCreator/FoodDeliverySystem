@@ -2,35 +2,42 @@
 #define FOODLE_TYPES_H__
 
 struct foodle_restaurant_t {
+    int restaurant_id;
     char *name;
     char *address;
     char *phone_number;
+    char *password;
     foodle_menu_t *menu;
 };
 
 struct foodle_order_t {
-    char *name;
+    int order_id;
+    int restaurant_id;
+    int customer_id;
+    int dasher_id;
     char *address;
-    char *phone_number;
-    char *email;
+    char *date;
+    char *status;
     foodle_menu_item_t *items;
 };
 
 struct foodle_dasher_t {
+    int dasher_id;
     char *name;
     char *address;
     char *phone_number;
     char *email;
-    char *car_make;
     char *car_model;
     char *car_color;
     char *car_plate;
 };
 
 struct foodle_customer_t {
+    int customer_id;
     char *name;
     char *address;
     char *phone_number;
+    char *password;
     char *email;
 };
 
