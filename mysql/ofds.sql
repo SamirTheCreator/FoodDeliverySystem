@@ -5,7 +5,7 @@ CREATE TABLE `customer` (
     name VARCHAR(255),
     phone_number VARCHAR(20) UNIQUE,
     email VARCHAR(255) UNIQUE,
-    password VARCHAR(255) -- Stored as a hash
+    password VARCHAR(255), -- Stored as a hash
     address VARCHAR(255)
 );
 
