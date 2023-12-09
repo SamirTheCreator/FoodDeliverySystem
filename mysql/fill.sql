@@ -1,14 +1,5 @@
 START TRANSACTION;
 
-SET FOREIGN_KEY_CHECKS = 0;
-DELETE FROM order_meal;
-DELETE FROM `order`;
-DELETE FROM customer;
-DELETE FROM menu;
-DELETE FROM dasher;
-DELETE FROM restaurant;
-SET FOREIGN_KEY_CHECKS = 1;
-
 
 INSERT INTO customer (name, phone_number, email, password, address) VALUES
 ('John Doe', '1234567890', 'johndoe@example.com', 'hashed_password_1', '1234 Main St'),

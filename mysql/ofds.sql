@@ -1,11 +1,11 @@
 START TRANSACTION;
+
 DROP TABLE IF EXISTS order_meal;
 DROP TABLE IF EXISTS `order`;
 DROP TABLE IF EXISTS menu;
 DROP TABLE IF EXISTS dasher;
 DROP TABLE IF EXISTS restaurant;
 DROP TABLE IF EXISTS `customer`;
-
 
 -- Customer Table
 CREATE TABLE `customer` (
