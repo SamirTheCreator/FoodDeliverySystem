@@ -1,5 +1,5 @@
-#ifndef FOODLE_TYPES_H__
-#define FOODLE_TYPES_H__
+#ifndef FOODLE_CLIENT_TYPES_H__
+#define FOODLE_CLIENT_TYPES_H__
 
 #define MAXSIZE 255
 
@@ -128,4 +128,4 @@ struct foodle_event_t {
 	union foodle_data_u data;
 };
 
-#endif FOODLE_TYPES_H__ // FOODLE_TYPES_H__
+#endif FOODLE_CLIENT_TYPES_H__ // FOODLE_CLIENT_TYPES_H__
