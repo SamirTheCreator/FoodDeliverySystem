@@ -25,8 +25,8 @@ struct thread_args {
 extern struct Handler* initChainedHandler();
 extern void handleEvent(struct Handler *chain, struct Event *event);
 
-struct Event event;
-union Data data;
+struct foodle_event_t event;
+union foodle_data_u data;
 
 int server_sock;
 sem_t mutex;
