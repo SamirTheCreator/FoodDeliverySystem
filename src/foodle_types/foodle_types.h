@@ -4,7 +4,7 @@
 #define MAXSIZE 255
 
 enum foodle_account_type_e {
-	foodle_restaurant_t,
+	Restaurant,
 	Customer,
 	Dasher
 };
