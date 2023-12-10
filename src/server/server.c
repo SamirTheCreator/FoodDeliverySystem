@@ -13,7 +13,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#include "data_structures.h"
+#include "foodle_types.h"
 
 #define MAXCLIENTS 10
 
