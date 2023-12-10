@@ -11,8 +11,8 @@
 
 #include "foodle_types.h"
 
-foodle_event_t event;
-foodle_data_u data;
+struct foodle_event_t event;
+struct foodle_data_u data;
 
 int main(int argc, char * argv[])
 {
