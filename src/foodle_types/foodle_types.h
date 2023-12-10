@@ -3,64 +3,64 @@
 
 #define MAXSIZE 255
 
-enum account_type {
-	Restaurant,
+enum foodle_account_type_e {
+	foodle_restaurant_t,
 	Customer,
 	Dasher
 };
 
-struct Account {
+struct foodle_account_t {
 	int clientID;
 	char email[MAXSIZE];
 	char password[MAXSIZE];
-	enum account_type type;
+	enum foodle_account_type_e type;
 	char name[MAXSIZE];
 	char phone[MAXSIZE];
 	char address[MAXSIZE];
 	char car_info[MAXSIZE];
 };
 
-struct Item {
+struct foodle_item_t {
 	int itemID;
 	char name[MAXSIZE];
 	int quantity;
 	float price;
 };
 
-struct Cart {
+struct foodle_cart_t {
 	int cartID;
-	struct Item item[MAXSIZE];
+	struct foodle_item_t item[MAXSIZE];
 	int total_price;
 };
 
-struct Meal {
+struct foodle_meal_t {
 	int mealID;
 	char name[MAXSIZE];
 	float price;
 };
 
-struct Menu {
+struct foodle_menu_t {
 	int restaurantID;
 	char restaurant_name[MAXSIZE];
-	struct Meal meal[MAXSIZE];
+	struct foodle_meal_t meal[MAXSIZE];
 };
 
 
-struct Restaurant {
+struct foodle_restaurant_t {
 	int restaurantID;
 	char name[MAXSIZE];
 	char category[MAXSIZE];
 	char address[MAXSIZE];
 };
 
-struct Delivery {
+struct foodle_delivery_t {
 	int orderID;
 	char name[MAXSIZE];
 	char restaurant_address[MAXSIZE];
 	char customer_address[MAXSIZE];
 };
 
-enum order_status {
+enum foodle_order_status_e {
 	Pending,
 	Confirmed,
 	Preparing,
@@ -68,34 +68,34 @@ enum order_status {
 	Finished
 };
 
-struct Order {
+struct foodle_order_t {
 	int orderID;
 	int customerID;
 	int restaurantID;
 	int dasherID;
-	enum order_status status;
+	enum foodle_order_status_e status;
 	char address[MAXSIZE];
 	time_t avg_preparation_time;
 	time_t avg_delivery_time;
 	time_t avg_arrival_time;
-	struct Cart cart;
+	struct foodle_cart_t cart;
 };
 
-union Data {
-	struct Account account;
-	struct Cart cart;
-	struct Item item;
-	struct Menu menu;
-	struct Meal meal;
-	struct Restaurant restaurant;
-	struct Restaurant restaurant_list[MAXSIZE];
-	struct Order order;
-	struct Order order_list[MAXSIZE];
-	struct Delivery delivery;
-	struct Delivery delivery_list[MAXSIZE];
+union foodle_data_u {
+	struct foodle_account_t account;
+	struct foodle_cart_t cart;
+	struct foodle_item_t item;
+	struct foodle_menu_t menu;
+	struct foodle_meal_t meal;
+	struct foodle_restaurant_t restaurant;
+	struct foodle_restaurant_t restaurant_list[MAXSIZE];
+	struct foodle_order_t order;
+	struct foodle_order_t order_list[MAXSIZE];
+	struct foodle_delivery_t delivery;
+	struct foodle_delivery_t delivery_list[MAXSIZE];
 };
 
-enum event_type {
+enum foodle_event_type_e {
 	AUTHENTICATE_ACCOUNT,
 	GET_ACCOUNT,
 	UPDATE_ACCOUNT,
@@ -123,23 +123,9 @@ enum event_type {
 	FINISH_DELIVERY
 };
 
-struct Event {
-	enum event_type type;
-	union Data data;
+struct foodle_event_t {
+	enum foodle_event_type_e type;
+	union foodle_data_u data;
 };
-
-typedef enum event_type 	foodle_event_type_e;
-typedef struct Event 		foodle_event_t;
-typedef union Data 			foodle_data_u;
-typedef enum account_type 	foodle_account_type_e;
-typedef struct Account 		foodle_account_t;
-typedef struct Cart 		foodle_cart_t;
-typedef struct Item 		foodle_item_t;
-typedef struct Menu 		foodle_menu_t;
-typedef struct Meal 		foodle_meal_t;
-typedef struct Restaurant 	foodle_restaurant_t;
-typedef struct Delivery 	foodle_delivery_t;
-typedef enum order_status 	foodle_order_status_e;
-typedef struct Order 		foodle_order_t;
 
 #endif FOODLE_TYPES_H__ // FOODLE_TYPES_H__
