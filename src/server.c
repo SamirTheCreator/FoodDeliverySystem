@@ -53,3 +53,24 @@ int main(int argc, char * argv[])
 	return 0;
 }
 
+
+
+
+/*
+
+	struct SOCKET_MESSAGE {
+		message_type type; write or read
+		union {
+			foodle_restaurant_t rest;
+			foodle_menu_t menu;
+			foodle_menu_item_t item;
+			string s;
+		} data;
+	}
+
+	#include "foodle_db.h"
+	if (type == read) {
+		foodle_restaurant_t = foodle_db_restaurant_save("Aziz Meals");
+	}
+
+*/
