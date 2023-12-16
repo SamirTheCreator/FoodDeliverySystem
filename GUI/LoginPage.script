@@ -1,0 +1,5 @@
+#!/bin/bash
+
+gcc -Wall -Wextra -g -Wno-format -o LoginPage-bin LoginPage.c -Wno-deprecated-declarations -Wno-format-security $(pkg-config --cflags --libs gtk+-3.0) -export-dynamic -lm
+
+
