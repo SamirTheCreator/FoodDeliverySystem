@@ -3,28 +3,30 @@
 
 #define MAXSIZE 255
 
-enum foodle_account_type_e {
-	Restaurant,
-	Customer,
-	Dasher
+enum foodle_user_type_e {
+	Restaurant = 0, 
+	Customer = 1,
+	Dasher = 2
 };
 
-struct foodle_account_t {
-	int clientID;
+struct foodle_user_t {
+	int userID;
+	char name[MAXSIZE];
+	char phone_number[MAXSIZE];
 	char email[MAXSIZE];
 	char password[MAXSIZE];
-	enum foodle_account_type_e type;
-	char name[MAXSIZE];
-	char phone[MAXSIZE];
 	char address[MAXSIZE];
-	char car_info[MAXSIZE];
+	enum foodle_user_type_e user_type;
+    char region[MAXSIZE];
+    char image_path[MAXSIZE];
+    char delivery_type[MAXSIZE];
 };
 
 struct foodle_item_t {
 	int itemID;
 	char name[MAXSIZE];
-	int quantity;
 	float price;
+	char image_path[MAXSIZE];
 };
 
 struct foodle_cart_t {
@@ -82,7 +84,7 @@ struct foodle_order_t {
 };
 
 union foodle_data_u {
-	struct foodle_account_t account;
+	struct foodle_user_t account;
 	struct foodle_cart_t cart;
 	struct foodle_item_t item;
 	struct foodle_menu_t menu;
@@ -128,4 +130,4 @@ struct foodle_event_t {
 	union foodle_data_u data;
 };
 
-#endif FOODLE_TYPES_H__ // FOODLE_TYPES_H__
+#endif // FOODLE_TYPES_H__
