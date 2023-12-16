@@ -45,4 +45,5 @@ foodle_customer_t foodle_db_customer_get_byname(char *name);
 foodle_customer_t foodle_db_customer_get_byemail(char *email);
 foodle_customer_t foodle_db_customer_get_byphone(char *phone);
 
-#endif FOODLE_DB_H_ // FOODLE_DB_H__
+#endif // FOODLE_DB_H__
+

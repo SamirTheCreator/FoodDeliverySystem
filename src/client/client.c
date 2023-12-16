@@ -10,43 +10,50 @@
 #include <arpa/inet.h>
 
 #include "foodle_types.h"
+#include "account.h"
+#include "customer.h"
+#include "dasher.h"
+#include "restaurant.h"
 
+int server_socket;
 struct foodle_event_t event;
-struct foodle_data_u data;
+union foodle_data_u data;
 
 int main(int argc, char * argv[])
 {
 	//char *ip = "127.0.0.1";
-	int port = 8080;
+	int port = 8888;
 
-	int sock;
 	struct sockaddr_in addr;
 	socklen_t addr_size;
 	
-	sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (sock < 0)
+	server_socket = socket(AF_INET, SOCK_STREAM, 0);
+	if (server_socket < 0) {
+		perror("Socket for server wasn't created");
 		exit(1);
-	printf("TCP server socket created.\n");
+	}
+	printf("TCP socket for server was created.\n");
 
 	memset(&addr, '\0', sizeof(addr));
 	addr.sin_family = AF_INET;
 	addr.sin_port = port;
 	addr.sin_addr.s_addr = INADDR_ANY;
 
-	if (connect(sock, (struct sockaddr *)&addr, sizeof addr) < 0)
+	if (connect(server_socket, (struct sockaddr *)&addr, sizeof(addr)) < 0)
 		exit(1);
 	printf("Connected to the server.\n");
-	
-	printf("Enter event type: ");
-	scanf("%d", (int *)&event.type);	
-	send(sock, &event, sizeof event, 0);
+		
+		
+	/////////////////////////////////////////////////////////
+	//Here you write your logic for client
+	#include "authorization.c"
+	////////////////////////////////////////////////////////
 
-	if (recv(sock, &data, sizeof data, MSG_WAITALL) == 0)
-		printf("Message was not received\n");
-	printf("Data from server was received\n");
 	
-	if (close(sock) < 0)
+	if (close(server_socket) < 0)	{
+		perror("Server socket was not closed");
 		exit(1);
+	}
 	printf("Disconnected from the server.\n");
 
 	return 0;

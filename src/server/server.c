@@ -33,8 +33,7 @@ sem_t mutex;
 
 void sig_handler(int signum)
 {
-	if (close(server_sock) < 0)
-	{
+	if (close(server_sock) < 0)	{
 		perror("Server socket was not closed");
 		exit(1);
 	}
@@ -52,22 +51,21 @@ void* client_handler(void *vargp)
 	
 	printf("Thread for client #%d was created\n", client_sock - 3);
 
-	while (1)
-	{
-	  	sem_wait(&mutex);
-		bytes_received = recv(client_sock, &event, sizeof event, MSG_WAITALL);
-		sem_post(&mutex); 
+	while (1) {
+	  	//sem_wait(&mutex);
+		bytes_received = recv(client_sock, &event, sizeof(event), MSG_WAITALL);
 		
-		if (bytes_received == 0)
-		{
-			printf("Client disconnected.\n");
+		if (bytes_received <= 0) {
+			fprintf(stderr, "Client disconnected.\n");
+			//sem_post(&mutex);
 			break;
 		}
 
+		printf("%d KB event was received from client #%d\n", bytes_received / 1024, client_sock - 3);
 		handleEvent(chain, &event);
-		data = event.data; //should be in handler
 		
 		send(client_sock, &data, sizeof(data), 0);
+		//sem_post(&mutex);
 	}
 	
 	return NULL;
@@ -79,7 +77,7 @@ int main(int argc, char * argv[])
 	signal(SIGINT, sig_handler);
 	
 	//char *ip = "127.0.0.1";
-	int port = 8080;
+	int port = 8888;
  
 	int client_sock[MAXCLIENTS];
 	struct sockaddr_in server_addr, client_addr;
@@ -89,12 +87,11 @@ int main(int argc, char * argv[])
 	struct Handler *chain;
  
 	server_sock = socket(AF_INET, SOCK_STREAM, 0);
-	if (server_sock < 0)
-	{
-		perror("Server socket wasn't created");
+	if (server_sock < 0) {
+		perror("Socket for server wasn't created");
 		exit(1);
 	}
-	printf("TCP server socket created.\n");
+	printf("TCP socket for server was created.\n");
  
 	memset(&server_addr, 0, sizeof server_addr);
 	server_addr.sin_family = AF_INET;
@@ -102,33 +99,29 @@ int main(int argc, char * argv[])
 	server_addr.sin_addr.s_addr = INADDR_ANY;
 	setsockopt(server_sock, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, 0, 0);
  
-	if (bind(server_sock, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0)
-	{
+	if (bind(server_sock, (struct sockaddr *)&server_addr, sizeof(server_addr)) < 0) {
 		perror("Server can't bind to port");
 		exit(1);
 	}
 	printf("Bound to the port number: %d\n", port);
  
-	if (listen(server_sock, MAXCLIENTS) < 0)
-	{
+	if (listen(server_sock, 1) < 0)	{
 		perror("Listen failed");
 		exit(1);
 	}
 	printf("Listening...\n");
 
-	if ((chain = initChainedHandler()) == NULL)
-	{
-		fprintf(stderr, "Failed to initialize handlers\n");
+	chain = initChainedHandler();
+	if (chain == NULL) {
+		fprintf(stderr, "Failed to initialize handlers.\n");
 		exit(1);
 	}
 
-	for (int i = 0; i < MAXCLIENTS; ++i)
-	{
+	for (int i = 0; i < MAXCLIENTS; ++i) {
 		addr_size = sizeof(client_addr);
 		client_sock[i] = accept(server_sock, (struct sockaddr *)&client_addr, &addr_size);
-		if (client_sock[i] < 0)
-		{
-			perror("Client socket was not created");
+		if (client_sock[i] < 0)	{
+			perror("Socket for client was not created");
 			exit(1);
 		}
 		printf("Client connected.\n");
@@ -137,16 +130,13 @@ int main(int argc, char * argv[])
 		pthread_create(&tid[i], NULL, client_handler, 0);
 	}
 	
-	for (int i = 0; i < MAXCLIENTS; ++i)
-	{
+	for (int i = 0; i < MAXCLIENTS; ++i) {
 		pthread_join(tid[i], NULL);
 		printf("Thread for client %d terminated.\n", client_sock[i] - 3);
 	}
 	
-	for (int i = 0; i < MAXCLIENTS; ++i)
-	{
-		if (close(client_sock[i]) < 0)
-		{
+	for (int i = 0; i < MAXCLIENTS; ++i) {
+		if (close(client_sock[i]) < 0) {
 			perror("Client socket was not closed");
 			exit(1);
 		}
