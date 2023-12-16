@@ -23,7 +23,7 @@ struct thread_args {
 } thread_args;
 
 extern struct Handler* initChainedHandler();
-extern void handleEvent(struct Handler *chain, struct Event *event);
+extern void handleEvent(struct Handler *chain, struct foodle_event_t *event);
 
 struct foodle_event_t event;
 union foodle_data_u data;
