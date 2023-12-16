@@ -9,7 +9,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
-#include "foodle_client_types.h"
+#include "foodle_types.h"
 
 struct foodle_event_t event;
 struct foodle_data_u data;
