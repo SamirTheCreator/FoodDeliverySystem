@@ -53,43 +53,46 @@ void foodle_db_add_item(MYSQL *con, struct foodle_item_t *item) {
 	}
 }
 
-// Does not work
+/*
+* @desc Get user by email
+* @param[in] MYSQL *con - connection to database
+* @param[in] char *email - email of user
+* @return foodle_user_t actual or user with userID = -1 if not found
+*/
 struct foodle_user_t foodle_db_get_user_byemail(MYSQL *con, char *email) {
 	char query[200];
-
 	struct foodle_user_t user;
 
 	sprintf(query, "SELECT * FROM user WHERE email='%s'", email);
-
-
 	if (mysql_query(con, query)) {
 		finish_with_error(con);
 	}
 
 	MYSQL_RES *result = mysql_store_result(con);
-
 	if (result == NULL) {
 		finish_with_error(con);
 	}
 
-	int num_fields = mysql_num_fields(result);
-
 	MYSQL_ROW row = mysql_fetch_row(result);
-
-	memset(&user, 0, sizeof user);
-	printf("%d\n", sizeof user);
-
-	user.userID = atoi((char*)&row[0]);
-	strcpy(user.name, row[1]);
-	strcpy(user.phone_number, row[2]);
-	strcpy(user.email, row[3]);
-	strcpy(user.password, row[4]);
-	user.user_type = strcmp(row[5], "Restaurant") == 0 || strcmp(row[5], "Dasher") == 0? (strcmp(row[5], "Restaurant") == 0 ? Restaurant : Dasher) : Customer;
-	strcpy(user.region, row[6]);
-	strcpy(user.image_path, row[7]);
-	strcpy(user.delivery_type, row[8]);
+    if (row) {
+        user.userID = atoi(row[0]);
+        strcpy(user.name, row[1]);
+        strcpy(user.phone_number, row[2]);
+        strcpy(user.email, row[3]);
+        strcpy(user.password, row[4]);
+        strcpy(user.address, row[5]);
+        if (strcmp(row[6], "Restaurant") == 0) user.user_type = Restaurant;
+        else if (strcmp(row[6], "Dasher") == 0) user.user_type = Dasher;
+        else user.user_type = Customer;
+        strcpy(user.region, row[7]);
+        strcpy(user.image_path, row[8]);
+        strcpy(user.delivery_type, row[9]);
+    } else {
+        user.userID = -1;
+    }
 	
 	mysql_free_result(result);
+    return user;
 }
 
 // Main only for testing the library
