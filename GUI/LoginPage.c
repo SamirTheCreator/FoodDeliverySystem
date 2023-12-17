@@ -6,6 +6,7 @@
 #include <string.h>
 #include <gtk/gtkx.h>
 #include <gtk/gtk.h>
+#include <glib.h>
 #include <math.h>
 #include <ctype.h>
 
@@ -35,7 +36,21 @@ GtkWidget   *Password2Field;
 
 GtkBuilder  *builder;
 
+
+
+
 void on_RegisterButton_activate();
+
+void freeze_sleep(int s)
+{
+    struct timespec delay;
+    delay.tv_sec = s;
+    delay.tv_nsec = 0;
+    nanosleep(&delay, NULL);
+    return;
+}
+
+
 
 void on_SubmitButton_activate()
 {
@@ -82,12 +97,23 @@ void on_CustomerSubmitButton_activate()
     RegisterButton = GTK_WIDGET(gtk_builder_get_object(new_builder, "RegisterButton"));
     g_signal_connect(RegisterButton, "clicked", G_CALLBACK(on_RegisterButton_activate), NULL);
     
-    const gchar *new_text = "Registration Completed!";
+    char *col = "green";   
+    gchar *new_text = "Registration Completed!";
+
+
+    if (strlen(name) == 0 || strlen(phone) == 0 || strlen(address) == 0 ||
+        strlen(password1) == 0 || strlen(password2) == 0) 
+    {
+    	new_text = "You have not been registered!";
+        col = "red"; 
+    }
+
     GdkRGBA color;
 
     gtk_label_set_text(GTK_LABEL(StatusLabel), new_text);
 
-    gdk_rgba_parse(&color, "green");
+    gdk_rgba_parse(&color, col);    
+  
     gtk_widget_override_color(StatusLabel, GTK_STATE_FLAG_NORMAL, &color);
 
     PangoFontDescription *font_desc = pango_font_description_from_string("System-ui 20");
@@ -96,9 +122,10 @@ void on_CustomerSubmitButton_activate()
     pango_font_description_free(font_desc);
     
     gtk_widget_show_all(new_window);
-    
     gtk_widget_hide(window);
-    
+
+    g_timeout_add(4000, G_SOURCE_FUNC(hide_status_label), StatusLabel);
+
     window = new_window;
     builder = new_builder;
 }
@@ -170,12 +197,23 @@ void on_DasherSubmitButton_activate()
     RegisterButton = GTK_WIDGET(gtk_builder_get_object(new_builder, "RegisterButton"));
     g_signal_connect(RegisterButton, "clicked", G_CALLBACK(on_RegisterButton_activate), NULL);
     
-    const gchar *new_text = "Registration Completed!";
+    char *col = "green";   
+    gchar *new_text = "Registration Completed!";
+
+
+    if (strlen(name) == 0 || strlen(phone) == 0 || strlen(address) == 0 ||
+    strlen(type) == 0 || strlen(password1) == 0 || strlen(password2) == 0) 
+    {
+    	new_text = "You have not been registered!";
+        col = "red"; 
+    }
+
     GdkRGBA color;
 
     gtk_label_set_text(GTK_LABEL(StatusLabel), new_text);
 
-    gdk_rgba_parse(&color, "green");
+    gdk_rgba_parse(&color, col);    
+  
     gtk_widget_override_color(StatusLabel, GTK_STATE_FLAG_NORMAL, &color);
 
     PangoFontDescription *font_desc = pango_font_description_from_string("System-ui 20");
@@ -184,9 +222,10 @@ void on_DasherSubmitButton_activate()
     pango_font_description_free(font_desc);
     
     gtk_widget_show_all(new_window);
-    
     gtk_widget_hide(window);
-    
+
+    g_timeout_add(4000, G_SOURCE_FUNC(hide_status_label), StatusLabel);
+
     window = new_window;
     builder = new_builder;
 }
@@ -219,6 +258,10 @@ void on_DasherButton_activate()
     gtk_widget_show_all(new_window);
     window = new_window;
     builder = new_builder;
+}
+
+void hide_status_label(GtkWidget *label) {
+    gtk_widget_hide(label);
 }
 
 void on_RestaurantSubmitButton_activate()
@@ -259,12 +302,23 @@ void on_RestaurantSubmitButton_activate()
     RegisterButton = GTK_WIDGET(gtk_builder_get_object(new_builder, "RegisterButton"));
     g_signal_connect(RegisterButton, "clicked", G_CALLBACK(on_RegisterButton_activate), NULL);
     
-    const gchar *new_text = "Registration Completed!";
+    char *col = "green";   
+    gchar *new_text = "Registration Completed!";
+
+
+    if (strlen(name) == 0 || strlen(phone) == 0 || strlen(address) == 0 ||
+    strlen(type) == 0 || strlen(password1) == 0 || strlen(password2) == 0) 
+    {
+    	new_text = "You have not been registered!";
+        col = "red"; 
+    }
+
     GdkRGBA color;
 
     gtk_label_set_text(GTK_LABEL(StatusLabel), new_text);
 
-    gdk_rgba_parse(&color, "green");
+    gdk_rgba_parse(&color, col);    
+  
     gtk_widget_override_color(StatusLabel, GTK_STATE_FLAG_NORMAL, &color);
 
     PangoFontDescription *font_desc = pango_font_description_from_string("System-ui 20");
@@ -272,16 +326,11 @@ void on_RestaurantSubmitButton_activate()
 
     pango_font_description_free(font_desc);
     
-    gtk_widget_set_sensitive(new_window, FALSE);
-
-    //Freeze screen and hide the label after 5 sec
-    
-    gtk_widget_set_sensetive(new_window,TRUE);
-    
     gtk_widget_show_all(new_window);
-    
     gtk_widget_hide(window);
-    
+
+    g_timeout_add(4000, G_SOURCE_FUNC(hide_status_label), StatusLabel);
+
     window = new_window;
     builder = new_builder;
 }
