@@ -48,6 +48,7 @@ CREATE TABLE `order` (
 CREATE TABLE order_meal (
     order_id INT,
     menu_id INT,
+    quantity INT DEFAULT 1,
     FOREIGN KEY (order_id) REFERENCES `order`(order_id) ON DELETE CASCADE,
     FOREIGN KEY (menu_id) REFERENCES menu(menu_id) ON DELETE CASCADE,
     PRIMARY KEY (order_id, menu_id)
