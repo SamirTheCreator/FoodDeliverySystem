@@ -5,14 +5,13 @@
 #include "foodle_db.h"
 #include "foodle_types.h"
 
-
 void finish_with_error(MYSQL *con) {
   fprintf(stderr, "%s\n", mysql_error(con));
   mysql_close(con);
   exit(1);
 }
 
-MYSQL* foodle_db_init (void) {
+MYSQL* foodle_db_init(void) {
 	MYSQL *con = mysql_init(NULL);
 	if (con == NULL) {
       		fprintf(stderr, "%s\n", mysql_error(con));
@@ -95,14 +94,52 @@ struct foodle_user_t foodle_db_get_user_byemail(MYSQL *con, char *email) {
     return user;
 }
 
+/*
+* @desc Function to get restaurant menu by restaurant id
+* Menu can consist of maximum 20 items
+* @return A pointer to dynamically allocated (heap),
+* DON'T FORGET TO FREE POINTER!
+*/
+struct foodle_item_t* foodle_db_get_menu(MYSQL *con, int id) {
+	struct foodle_item_t *menu = malloc(20*sizeof(struct foodle_item_t));
+	memset(menu, 0, 20*sizeof(struct foodle_item_t));
+	char query[200];
+	int i=0;
+
+	sprintf(query, "SELECT * FROM menu WHERE restaurant_id=%d", id);
+	if (mysql_query(con, query)) {
+		finish_with_error(con);
+	}
+
+	MYSQL_RES *result = mysql_store_result(con);
+	if (result == NULL) {
+		finish_with_error(con);
+	}
+
+	MYSQL_ROW row;
+	while ((row = mysql_fetch_row(result))) {
+		menu[i].itemID = atoi(row[0]),
+		strcpy(menu[i].name, row[2]),
+		menu[i].price = atof(row[3]),
+		strcpy(menu[i].image_path, row[4]),
+		i++;
+	}
+	return menu;
+}
+
 // Main only for testing the library
 int main (int argc, char **argv) {
 	MYSQL *con = foodle_db_init();
-	
-	struct foodle_user_t user = foodle_db_get_user_byemail(con, "john@doe");
 
-	printf("%d\n%s\n%s\n%s\n%s\n%s\n%d\n%s\n%s\n%s", user.userID, user.name, user.phone_number, user.email, user.password, user.address, user.user_type, user.region, user.image_path, user.delivery_type);
-	
+
+	// How to get menu:
+	// struct foodle_item_t *menu = foodle_db_get_menu(con, 239);
+	// struct foodle_item_t *ptr;
+	// for (ptr = menu; ptr->itemID != 0; ptr++) {
+	// 	printf("%d, %s, %f, %s\n", ptr->itemID, ptr->name, ptr->price, ptr->image_path);
+	// }
+	// free(menu);
+
 	mysql_close(con);
 	exit(0);
 }
