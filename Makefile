@@ -9,8 +9,7 @@ SRC_FILES += \
 # Include folders common to all targets
 INC_FOLDERS += \
 	$(PROJ_DIR)/src/foodle_db \
-	$(PROJ_DIR)/src/foodle_db/foodle_db.h \
-	$(PROJ_DIR)/mysql/include
+	$(PROJ_DIR)/src/foodle_types \
 
 INC_PARAMS=$(foreach d, $(INC_FOLDERS), -I$d)
 
@@ -20,9 +19,12 @@ OPT += -O3 -g3
 # C flags common to all targets
 # CFLAGS += $(OPT)
 CFLAGS += $(INC_PARAMS)
+CFLAGS += $(shell pkg-config --cflags mysqlclient)
+CFLAGS += $(shell pkg-config --libs mysqlclient)
 
-.PHONY: database_api
-database_api:
+
+.PHONY: foodle_db
+foodle_db:
 	@echo "Building database_api"
 	@mkdir -p $(BUILD_DIR)
-	@$(CC) $(CFLAGS) $(SRC_FILES) -o $(BUILD_DIR)/database_api
+	$(CC) $(CFLAGS) $(SRC_FILES) -o $(BUILD_DIR)/foodle_db
