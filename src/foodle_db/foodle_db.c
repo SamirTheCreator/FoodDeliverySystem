@@ -52,12 +52,6 @@ void foodle_db_add_item(MYSQL *con, struct foodle_item_t *item) {
 	}
 }
 
-/*
-* @desc Get user by email
-* @param[in] MYSQL *con - connection to database
-* @param[in] char *email - email of user
-* @return foodle_user_t actual or user with userID = -1 if not found
-*/
 struct foodle_user_t foodle_db_get_user_byemail(MYSQL *con, char *email) {
 	char query[200];
 	struct foodle_user_t user;
@@ -94,12 +88,6 @@ struct foodle_user_t foodle_db_get_user_byemail(MYSQL *con, char *email) {
     return user;
 }
 
-/*
-* @desc Function to get restaurant menu by restaurant id
-* Menu can consist of maximum 20 items
-* @return A pointer to dynamically allocated (heap),
-* DON'T FORGET TO FREE POINTER!
-*/
 struct foodle_item_t* foodle_db_get_menu(MYSQL *con, int id) {
 	struct foodle_item_t *menu = malloc(20*sizeof(struct foodle_item_t));
 	memset(menu, 0, 20*sizeof(struct foodle_item_t));
@@ -127,29 +115,18 @@ struct foodle_item_t* foodle_db_get_menu(MYSQL *con, int id) {
 	return menu;
 }
 
-/*
-* @desc: Function to add order to the database
-* @param: con - connection to the mysql server
-* @param: menu_id - list of ids of items in that order
-* 
-*/
 void foodle_db_add_order(MYSQL* con, int *menu_id, int n)
 
 // Main only for testing the library
 int main (int argc, char **argv) {
 	MYSQL *con = foodle_db_init();
-
-
 	// How to get menu:
 	// struct foodle_item_t *menu = foodle_db_get_menu(con, 239);
 	// struct foodle_item_t *ptr;
 	// for (ptr = menu; ptr->itemID != 0; ptr++) {
 	// 	printf("%d, %s, %f, %s\n", ptr->itemID, ptr->name, ptr->price, ptr->image_path);
 	// }
-
-
 	// free(menu);
-
 	mysql_close(con);
 	exit(0);
 }
