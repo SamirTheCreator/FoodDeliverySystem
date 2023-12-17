@@ -11,6 +11,9 @@ extern union foodle_data_u data;
 
 int addMeal(char *meal_name, float price, int restaurantID)
 {
+	memset(&event, 0, sizeof(event));
+	memset(&data, 0, sizeof(data));
+	
 	event.type = ADD_MEAL;
 	event.data.restaurant.restaurantID = restaurantID;
 	strcpy(event.data.meal.name, meal_name);
@@ -19,51 +22,60 @@ int addMeal(char *meal_name, float price, int restaurantID)
 	if (send(server_socket, &event, sizeof(event), 0) == 0)
 		return 0;
 
-	if (recv(server_socket, &data, sizeof(data), 0) == MSG_WAITALL)
+	if (recv(server_socket, &data, sizeof(data), MSG_WAITALL) == 0)
 		return 0;
 
 	return data.meal.mealID;
 }
 
+int updateMeal(int mealID, char* meal_name, float price, int restaurantID)
+{
+	memset(&event, 0, sizeof(event));
+	memset(&data, 0, sizeof(data));
+	
+	event.type = UPDATE_MEAL;
+	event.data.restaurant.restaurantID = restaurantID;
+	event.data.meal.mealID = mealID;
+	strcpy(event.data.meal.name, meal_name);
+	event.data.meal.price = price;
+	
+	if (send(server_socket, &event, sizeof(event), 0) == 0)
+		return 0;
+
+	if (recv(server_socket, &data, sizeof(data), MSG_WAITALL) == 0)
+		return 0;
+
+    return 1;
+}
+
 int deleteMeal(int mealID, int restaurantID)
 {
+	memset(&event, 0, sizeof(event));
+	memset(&data, 0, sizeof(data));
+	
 	event.type = DELETE_MEAL;
 	event.data.meal.mealID = mealID;
 
 	if (send(server_socket, &event, sizeof(event), 0) == 0)
 		return 0;
 
-	if (recv(server_socket, &data, sizeof(data), 0) == MSG_WAITALL)
+	if (recv(server_socket, &data, sizeof(data), MSG_WAITALL) == 0)
 		return 0;
 
 	return 1;
 }
 
-int updateMeal(int mealID, char* meal_name, float price, int restaurantID)
-{
-	event.type = UPDATE_MEAL;
-	event.data.restaurant.restaurantID = restaurantID;
-	strcpy(event.data.meal.name, meal_name);
-	event.data.meal.price = price;
-	event.data.meal.mealID = mealID;
-
-	if (send(server_socket, &event, sizeof(event), 0) == 0)
-		return 0;
-
-	if (recv(server_socket, &data, sizeof(data), 0) == MSG_WAITALL)
-		return 0;
-
-    return 1;
-}
-
 struct foodle_order_t* getOrderList(void)
 {
+	memset(&event, 0, sizeof(event));
+	memset(&data, 0, sizeof(data));
+	
 	event.type = GET_ORDER_LIST;
 
 	if (send(server_socket, &event, sizeof(event), 0) == 0)
 		return NULL;
 
-	if (recv(server_socket, &data, sizeof(data), 0) == MSG_WAITALL)
+	if (recv(server_socket, &data, sizeof(data), MSG_WAITALL) == 0)
 		return NULL;
 
 	return &data.order;
@@ -71,6 +83,9 @@ struct foodle_order_t* getOrderList(void)
 
 struct foodle_order_t selectOrder(int orderID)
 {
+	memset(&event, 0, sizeof(event));
+	memset(&data, 0, sizeof(data));
+	
 	event.type = SELECT_ORDER;
 	event.data.order.orderID = orderID;
 	event.data.order.status = Preparing;
@@ -78,7 +93,7 @@ struct foodle_order_t selectOrder(int orderID)
 	if (send(server_socket, &event, sizeof(event), 0) == 0)
 		return (struct foodle_order_t){};
 
-	if (recv(server_socket, &data, sizeof(data), 0) == MSG_WAITALL)
+	if (recv(server_socket, &data, sizeof(data), MSG_WAITALL) == 0)
 		return (struct foodle_order_t){};
 
 	return data.order;
@@ -86,13 +101,16 @@ struct foodle_order_t selectOrder(int orderID)
 
 int finishOrder(int orderID)
 {
+	memset(&event, 0, sizeof(event));
+	memset(&data, 0, sizeof(data));
+	
 	event.type = FINISH_ORDER;
 	event.data.order.orderID = orderID;
     
 	if (send(server_socket, &event, sizeof(event), 0) == 0)
 		return 0;
 
-	if (recv(server_socket, &data, sizeof(data), 0) == MSG_WAITALL)
+	if (recv(server_socket, &data, sizeof(data), MSG_WAITALL) == 0)
 		return 0;
 
 	return 1;

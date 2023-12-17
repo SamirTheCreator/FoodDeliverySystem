@@ -78,6 +78,7 @@ struct foodle_order_t {
 	int dasherID;
 	enum foodle_order_status_e status;
 	string address;
+	string date;
 	time_t avg_preparation_time;
 	time_t avg_delivery_time;
 	time_t avg_arrival_time;

@@ -16,7 +16,7 @@ struct foodle_delivery_t* getDeliveryList(void)
 	if(send(server_socket, &event, sizeof(event), 0) == 0)
 		return NULL;
 
-	if (recv(server_socket, &data, sizeof(data), 0) == 0)
+	if (recv(server_socket, &data, sizeof(data), MSG_WAITALL) == 0)
 		return NULL;
 
 	return data.delivery_list;
@@ -31,7 +31,7 @@ struct foodle_delivery_t chooseDelivery(int dasherID, int orderID)
 	if (send(server_socket, &event, sizeof(event), 0) == 0)
 		return (struct foodle_delivery_t){};
 
-	if (recv(server_socket, &data, sizeof(data), 0) == 0)
+	if (recv(server_socket, &data, sizeof(data), MSG_WAITALL) == 0)
 		return (struct foodle_delivery_t){};
 
 	return data.delivery;
@@ -46,7 +46,7 @@ int withdrawDelivery(int dasherID, int orderID)
 	if (send(server_socket, &event, sizeof event, 0) == 0)
 		return 0;
 
-	if (recv(server_socket, &data, sizeof data, 0) == 0)
+	if (recv(server_socket, &data, sizeof data, MSG_WAITALL) == 0)
 		return 0;
     
 	return 1;
@@ -61,7 +61,7 @@ int finishDelivery(int dasherID, int orderID)
 	if (send(server_socket, &event, sizeof(event), 0) == 0)
 		return 0;
 
-	if (recv(server_socket, &data, sizeof(data), 0) == 0)
+	if (recv(server_socket, &data, sizeof(data), MSG_WAITALL) == 0)
 		return 0;
         
 	return 1;
