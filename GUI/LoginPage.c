@@ -12,6 +12,8 @@
 GtkWidget  *window;
 GtkWidget   *fixed;
 
+GtkWidget   *StatusLabel;
+
 GtkWidget   *SubmitButton;
 GtkWidget   *RegisterButton;
 GtkWidget   *CustomerButton;
@@ -31,7 +33,9 @@ GtkWidget   *AddressField;
 GtkWidget   *Password1Field;
 GtkWidget   *Password2Field;
 
-GtkBuilder   *builder;
+GtkBuilder  *builder;
+
+void on_RegisterButton_activate();
 
 void on_SubmitButton_activate()
 {
@@ -55,6 +59,48 @@ void on_CustomerSubmitButton_activate()
     g_print("Address: %s\n",address);
     g_print("Password1: %s\n",password1);
     g_print("Password2: %s\n",password2);
+    
+    GtkBuilder *new_builder = gtk_builder_new();
+    
+    if (gtk_builder_add_from_file(new_builder, "LoginPage.glade", NULL) == 0) {
+        g_error("Error loading New Glade file");
+        return;
+    }
+    
+    GtkWidget *new_window = GTK_WIDGET(gtk_builder_get_object(new_builder, "LoginWindow"));
+
+    g_signal_connect(new_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+
+    LoginField = GTK_WIDGET(gtk_builder_get_object(new_builder, "LoginField"));
+    PasswordField = GTK_WIDGET(gtk_builder_get_object(new_builder, "PasswordField"));
+    
+    StatusLabel = GTK_WIDGET(gtk_builder_get_object(new_builder, "StatusLabel"));  
+
+    SubmitButton = GTK_WIDGET(gtk_builder_get_object(new_builder, "SubmitButton"));
+    g_signal_connect(SubmitButton, "clicked", G_CALLBACK(on_SubmitButton_activate), NULL);
+    
+    RegisterButton = GTK_WIDGET(gtk_builder_get_object(new_builder, "RegisterButton"));
+    g_signal_connect(RegisterButton, "clicked", G_CALLBACK(on_RegisterButton_activate), NULL);
+    
+    const gchar *new_text = "Registration Completed!";
+    GdkRGBA color;
+
+    gtk_label_set_text(GTK_LABEL(StatusLabel), new_text);
+
+    gdk_rgba_parse(&color, "green");
+    gtk_widget_override_color(StatusLabel, GTK_STATE_FLAG_NORMAL, &color);
+
+    PangoFontDescription *font_desc = pango_font_description_from_string("System-ui 20");
+    gtk_widget_override_font(StatusLabel, font_desc);
+
+    pango_font_description_free(font_desc);
+    
+    gtk_widget_show_all(new_window);
+    
+    gtk_widget_hide(window);
+    
+    window = new_window;
+    builder = new_builder;
 }
 
 void on_CustomerButton_activate()
@@ -100,7 +146,49 @@ void on_DasherSubmitButton_activate()
     g_print("Address: %s\n",address);
     g_print("Delivery Type Field: %s\n", type);
     g_print("Password1: %s\n",password1);
-    g_print("Password2: %s\n",password2);   
+    g_print("Password2: %s\n",password2);
+    
+    GtkBuilder *new_builder = gtk_builder_new();
+    
+    if (gtk_builder_add_from_file(new_builder, "LoginPage.glade", NULL) == 0) {
+        g_error("Error loading New Glade file");
+        return;
+    }
+    
+    GtkWidget *new_window = GTK_WIDGET(gtk_builder_get_object(new_builder, "LoginWindow"));
+
+    g_signal_connect(new_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+    
+    StatusLabel = GTK_WIDGET(gtk_builder_get_object(new_builder, "StatusLabel"));
+
+    LoginField = GTK_WIDGET(gtk_builder_get_object(new_builder, "LoginField"));
+    PasswordField = GTK_WIDGET(gtk_builder_get_object(new_builder, "PasswordField"));  
+
+    SubmitButton = GTK_WIDGET(gtk_builder_get_object(new_builder, "SubmitButton"));
+    g_signal_connect(SubmitButton, "clicked", G_CALLBACK(on_SubmitButton_activate), NULL);
+    
+    RegisterButton = GTK_WIDGET(gtk_builder_get_object(new_builder, "RegisterButton"));
+    g_signal_connect(RegisterButton, "clicked", G_CALLBACK(on_RegisterButton_activate), NULL);
+    
+    const gchar *new_text = "Registration Completed!";
+    GdkRGBA color;
+
+    gtk_label_set_text(GTK_LABEL(StatusLabel), new_text);
+
+    gdk_rgba_parse(&color, "green");
+    gtk_widget_override_color(StatusLabel, GTK_STATE_FLAG_NORMAL, &color);
+
+    PangoFontDescription *font_desc = pango_font_description_from_string("System-ui 20");
+    gtk_widget_override_font(StatusLabel, font_desc);
+
+    pango_font_description_free(font_desc);
+    
+    gtk_widget_show_all(new_window);
+    
+    gtk_widget_hide(window);
+    
+    window = new_window;
+    builder = new_builder;
 }
 
 void on_DasherButton_activate()
@@ -147,7 +235,55 @@ void on_RestaurantSubmitButton_activate()
     g_print("Address: %s\n",address);
     g_print("Delivery Type Field: %s\n", type);
     g_print("Password1: %s\n",password1);
-    g_print("Password2: %s\n",password2);   
+    g_print("Password2: %s\n",password2);
+    
+    GtkBuilder *new_builder = gtk_builder_new();
+    
+    if (gtk_builder_add_from_file(new_builder, "LoginPage.glade", NULL) == 0) {
+        g_error("Error loading New Glade file");
+        return;
+    }
+    
+    GtkWidget *new_window = GTK_WIDGET(gtk_builder_get_object(new_builder, "LoginWindow"));
+
+    g_signal_connect(new_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+    
+    StatusLabel = GTK_WIDGET(gtk_builder_get_object(new_builder, "StatusLabel"));
+
+    LoginField = GTK_WIDGET(gtk_builder_get_object(new_builder, "LoginField"));
+    PasswordField = GTK_WIDGET(gtk_builder_get_object(new_builder, "PasswordField"));  
+
+    SubmitButton = GTK_WIDGET(gtk_builder_get_object(new_builder, "SubmitButton"));
+    g_signal_connect(SubmitButton, "clicked", G_CALLBACK(on_SubmitButton_activate), NULL);
+    
+    RegisterButton = GTK_WIDGET(gtk_builder_get_object(new_builder, "RegisterButton"));
+    g_signal_connect(RegisterButton, "clicked", G_CALLBACK(on_RegisterButton_activate), NULL);
+    
+    const gchar *new_text = "Registration Completed!";
+    GdkRGBA color;
+
+    gtk_label_set_text(GTK_LABEL(StatusLabel), new_text);
+
+    gdk_rgba_parse(&color, "green");
+    gtk_widget_override_color(StatusLabel, GTK_STATE_FLAG_NORMAL, &color);
+
+    PangoFontDescription *font_desc = pango_font_description_from_string("System-ui 20");
+    gtk_widget_override_font(StatusLabel, font_desc);
+
+    pango_font_description_free(font_desc);
+    
+    gtk_widget_set_sensitive(new_window, FALSE);
+
+    //Freeze screen and hide the label after 5 sec
+    
+    gtk_widget_set_sensetive(new_window,TRUE);
+    
+    gtk_widget_show_all(new_window);
+    
+    gtk_widget_hide(window);
+    
+    window = new_window;
+    builder = new_builder;
 }
 
 void on_RestaurantButton_activate()
@@ -209,7 +345,6 @@ void on_RegisterButton_activate()
     builder = new_builder;
 }
 
-
 int main(int argc, char *argv[]) {
     gtk_init(&argc, &argv);
 
@@ -231,7 +366,8 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-
+    StatusLabel = GTK_WIDGET(gtk_builder_get_object(builder, "StatusLabel"));
+	
     SubmitButton = GTK_WIDGET(gtk_builder_get_object(builder, "SubmitButton"));
     g_signal_connect(SubmitButton, "clicked", G_CALLBACK(on_SubmitButton_activate), NULL);
     

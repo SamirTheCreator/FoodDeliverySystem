@@ -186,6 +186,23 @@
             <property name="y">538</property>
           </packing>
         </child>
+        <child>
+          <object class="GtkLabel" id="StatusLabel">
+            <property name="width-request">190</property>
+            <property name="height-request">80</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <attributes>
+              <attribute name="font-desc" value="System-ui Bold 10"/>
+              <attribute name="foreground" value="#ffffffffffff"/>
+              <attribute name="size" value="41984"/>
+            </attributes>
+          </object>
+          <packing>
+            <property name="x">417</property>
+            <property name="y">122</property>
+          </packing>
+        </child>
       </object>
     </child>
   </object>
