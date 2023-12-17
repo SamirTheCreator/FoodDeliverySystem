@@ -146,6 +146,8 @@ int main (int argc, char **argv) {
 	// for (ptr = menu; ptr->itemID != 0; ptr++) {
 	// 	printf("%d, %s, %f, %s\n", ptr->itemID, ptr->name, ptr->price, ptr->image_path);
 	// }
+
+
 	// free(menu);
 
 	mysql_close(con);

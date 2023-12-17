@@ -125,3 +125,42 @@ struct foodle_event_t {
 };
 
 #endif // FOODLE_TYPES_H__
+
+
+
+/*
+
+cart:
+- orderID
+- customerID
+- itemID
+
+cart
+
+| orderID | customerID | menuID | quantity |
+|---------|------------|--------|----------|
+| 1       | 1          | 1      | 2        |
+| 1       | 1          | 2      | 1        |
+| 1       | 1          | 3      | 1        |
+| 2       | 1          | 1      | 1        |
+| 2       | 1          | 2      | 1        |
+| 2       | 1          | 3      | 1        |
+
+
+
+(customerid, restid, dasherid, "placed", menuid)
+
+
+void send_order() {
+query
+"INSERT INTO `order` (customer_id, restaurant_id, dasher_id, date, order_status) 
+VALUES (1, 2, 3, NOW(), 'Placed');
+)
+for (i : menuid):
+query (
+        "INSERT INTO order_meal (order_id, menu_id)
+        VALUES (LAST_INSERT_ID(), %i);
+        COMMIT;" 
+    )
+}
+*/
