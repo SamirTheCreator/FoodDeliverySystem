@@ -3,7 +3,7 @@
 #include <mysql.h>
 #include <string.h>
 #include "foodle_db.h"
-#include "foodle_types.h"
+#include "../foodle_types/foodle_types.h"
 
 void finish_with_error(MYSQL *con) {
   fprintf(stderr, "%s\n", mysql_error(con));
@@ -126,6 +126,14 @@ struct foodle_item_t* foodle_db_get_menu(MYSQL *con, int id) {
 	}
 	return menu;
 }
+
+/*
+* @desc: Function to add order to the database
+* @param: con - connection to the mysql server
+* @param: menu_id - list of ids of items in that order
+* 
+*/
+void foodle_db_add_order(MYSQL* con, int *menu_id, int n)
 
 // Main only for testing the library
 int main (int argc, char **argv) {
