@@ -3,12 +3,14 @@
 
 #define MAXSIZE 255
 
+// Reviewed
 enum foodle_user_type_e {
 	Restaurant = 0, 
 	Customer = 1,
 	Dasher = 2
 };
 
+// Reviewed
 struct foodle_user_t {
 	int userID;
 	char name[MAXSIZE];
@@ -22,6 +24,7 @@ struct foodle_user_t {
     char delivery_type[MAXSIZE];
 };
 
+// Reviewed
 struct foodle_item_t {
 	int itemID;
 	char name[MAXSIZE];
@@ -29,25 +32,28 @@ struct foodle_item_t {
 	char image_path[MAXSIZE];
 };
 
+// Reviewed
 struct foodle_cart_t {
 	int cartID;
 	struct foodle_item_t item[MAXSIZE];
 	int total_price;
 };
 
+// ?
 struct foodle_meal_t {
 	int mealID;
 	char name[MAXSIZE];
 	float price;
 };
 
+// Why do we need restaurant name in menu?
 struct foodle_menu_t {
 	int restaurantID;
 	char restaurant_name[MAXSIZE];
 	struct foodle_meal_t meal[MAXSIZE];
 };
 
-
+// We have name here
 struct foodle_restaurant_t {
 	int restaurantID;
 	char name[MAXSIZE];
@@ -62,25 +68,13 @@ struct foodle_delivery_t {
 	char customer_address[MAXSIZE];
 };
 
-enum foodle_order_status_e {
-	Pending,
-	Confirmed,
-	Preparing,
-	Delivering,
-	Finished
-};
-
 struct foodle_order_t {
 	int orderID;
 	int customerID;
 	int restaurantID;
 	int dasherID;
-	enum foodle_order_status_e status;
-	char address[MAXSIZE];
-	time_t avg_preparation_time;
-	time_t avg_delivery_time;
-	time_t avg_arrival_time;
-	struct foodle_cart_t cart;
+	char date[MAXSIZE];
+	char status[MAXSIZE];
 };
 
 union foodle_data_u {
