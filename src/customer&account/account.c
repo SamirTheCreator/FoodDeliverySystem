@@ -6,15 +6,14 @@
 #include <string.h>             // for strlen(), strcmp()
 #include <sys/socket.h>         // for socket(), connect(), send(), and recv()
 
-#include "data_structures.h"    // This is the header file for the structures used in the program.
+#include "foodle_types.h"    // This is the header file for the structures used in the program.
 #include "account.h"            // This is the header file for the Account API endpoints.
 
-
-int authenticateAccount(char *username, char *password) {
+int authenticateAccount(char *name, char *password) {
 
     //preparing event to be sent to the event handler
     event.type = AUTHENTICATE_ACCOUNT;
-    strcpy(event.data.account.username, username);
+    strcpy(event.data.account.name, name);
     strcpy(event.data.account.password, password);
 
     //sending event to the event handler
@@ -32,16 +31,16 @@ int authenticateAccount(char *username, char *password) {
     }
 
     //returning result
-    return data.account.clientID;
+    return data.account.userID;
 
 }
 
 
-struct Account* getAccount(int clientID) {
+struct foodle_user_t* getAccount(int userID) {
 
     //preparing event to be sent to the event handler
     event.type = GET_ACCOUNT;
-    event.data.account.clientID = clientID;
+    event.data.account.userID = userID;
 
     //sending event to the event handler
     if((send(server_socket, &event, sizeof(event), 0)) == 0) {
@@ -63,7 +62,7 @@ struct Account* getAccount(int clientID) {
 }
 
 
-int updateAccount(struct Account account) {
+int updateAccount(struct foodle_user_t account) {
 
     //preparing event to be sent to the event handler
     event.type = UPDATE_ACCOUNT;
@@ -89,11 +88,11 @@ int updateAccount(struct Account account) {
 }
 
 
-int deleteAccount(int clientID) {
+int deleteAccount(int userID) {
 
     //preparing event to be sent to the event handler
     event.type = DELETE_ACCOUNT;
-    event.data.account.clientID = clientID;
+    event.data.account.userID = userID;
 
     //sending event to the event handler
     if((send(server_socket, &event, sizeof(event), 0)) == 0) {

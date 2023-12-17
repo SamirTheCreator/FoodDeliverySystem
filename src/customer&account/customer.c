@@ -3,11 +3,11 @@
 //
 
 #include <stdio.h>
-#include <string.h>             // for strlen(), strcmp()
-#include <sys/socket.h>         // for socket(), connect(), send(), and recv()
+#include <string.h>                 // for strlen(), strcmp()
+#include <sys/socket.h>             // for socket(), connect(), send(), and recv()
 
-#include "customer.h"           // This is the header file for the Customer API endpoints.
-#include "data_structures.h"    // This is the header file for the structures used in the program.
+#include "customer.h"               // This is the header file for the Customer API endpoints.
+#include "foodle_types.h"    // This is the header file for the structures used in the program.
 
 
 void viewCart(void){
@@ -19,32 +19,24 @@ void viewCart(void){
     if((send(server_socket, &event, sizeof(event), 0)) == 0) {
 
         //error sending event
-        return;
+        printf("Error sending event\n");
     }
 
     //receiving data from the server
     if ((recv(server_socket, &data, sizeof(data), 0)) == 0) {
 
         //error receiving data
-        return;
-    }
-
-    //printing the cart
-    printf("Cart:\n");
-    for(int i = 0; i < data.cart.item[i].quantity; i++){
-
-        printf("%d. %s\n", i+1, data.cart.item[i].name);
+        printf("Error receiving data\n");
     }
 
 }
 
 
-int addItem(int itemID, int quantity){
+int addItem(int itemID){
 
         //preparing event to be sent to the event handler
         event.type = ADD_ITEM;
         event.data.item.itemID = itemID;
-        event.data.item.quantity = quantity;
 
         //sending event to the event handler
         if((send(server_socket, &event, sizeof(event), 0)) == 0) {
@@ -91,12 +83,11 @@ int deleteItem(int itemID){
 }
 
 
-int updateItem(int itemID, int quantity){
+int updateItem(int itemID){
 
     //preparing event to be sent to the event handler
     event.type = UPDATE_ITEM;
     event.data.item.itemID = itemID;
-    event.data.item.quantity = quantity;
 
     //sending event to the event handler
     if((send(server_socket, &event, sizeof(event), 0)) == 0) {
@@ -117,7 +108,7 @@ int updateItem(int itemID, int quantity){
 }
 
 
-struct Order* orderCart(int customerID, struct Order order, char *address){
+struct foodle_order_t* orderCart(int customerID, struct foodle_order_t order, char *address){
 
     //preparing event to be sent to the event handler
     event.type = ORDER_CART;
@@ -144,7 +135,7 @@ struct Order* orderCart(int customerID, struct Order order, char *address){
 }
 
 
-struct Delevery* getDeliveryList(void){
+struct foodle_delivery_t* getDeliveryList(void){
 
     //preparing event to be sent to the event handler
     event.type = GET_DELIVERY_LIST;
@@ -164,14 +155,14 @@ struct Delevery* getDeliveryList(void){
    }
 
     //returning result
-    return data.delivery_list;
+    return &data.delivery_list[0]; // address of the first element of the array
 }
 
 
-struct Restaurant* getRestaurantList(void){
+struct foodle_restaurant_t* getRestaurantList(void){
 
     //preparing event to be sent to the event handler
-    event.type = GET_RESTAURANTS_LIST;
+    event.type = GET_RESTAURANT_LIST;
 
     //sending event to the event handler
     if((send(server_socket, &event, sizeof(event), 0)) == 0) {
@@ -188,11 +179,11 @@ struct Restaurant* getRestaurantList(void){
    }
 
     //returning result
-    return data.restaurant_list;
+    return &data.restaurant_list[0]; // address of the first element of the array
 }
 
 
-struct Menu* getMenu(int restaurantID){
+struct foodle_menu_t* getMenu(int restaurantID){
 
     //preparing event to be sent to the event handler
     event.type = GET_MENU;
