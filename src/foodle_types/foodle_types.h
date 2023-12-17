@@ -1,25 +1,27 @@
-#ifndef FOODLE_CLIENT_TYPES_H__
-#define FOODLE_CLIENT_TYPES_H__
+#ifndef FOODLE_CLIENT_TYPES_H
+#define FOODLE_CLIENT_TYPES_H
 
-#define MAXSIZE 16
+#define MAXSIZE 32
 
 typedef char string[MAXSIZE];
 
-enum foodle_account_type_e {
+enum foodle_user_type_e {
 	Restaurant,
 	Customer,
 	Dasher
 };
 
-struct foodle_account_t {
-	int clientID;
+struct foodle_user_t {
+	int userID;
 	string email;
 	string password;
-	enum foodle_account_type_e type;
+	enum foodle_user_type_e type;
 	string name;
-	string phone;
+	string phone_number;
 	string address;
-	string car_info;
+	string region;
+	string image_path;
+	string delivery_type;
 };
 
 struct foodle_meal_t {
@@ -36,6 +38,7 @@ struct foodle_menu_t {
 
 struct foodle_item_t {
 	struct foodle_meal_t meal;
+	string image_path;
 	int quantity;
 	float net_price;
 };
@@ -48,14 +51,14 @@ struct foodle_cart_t {
 
 struct foodle_restaurant_t {
 	int restaurantID;
-	char name[MAXSIZE];
-	char category[MAXSIZE];
-	char address[MAXSIZE];
+	string name;
+	string category;
+	string address;
 };
 
 struct foodle_delivery_t {
 	int orderID;
-	string name;
+	string meal_category;
 	string restaurant_address;
 	string customer_address;
 };
@@ -82,13 +85,11 @@ struct foodle_order_t {
 };
 
 union foodle_data_u {
-	struct foodle_account_t account;
+	struct foodle_user_t user;
 	struct foodle_menu_t menu;
 	struct foodle_meal_t meal;
 	struct foodle_restaurant_t restaurant;
 	struct foodle_restaurant_t restaurant_list[MAXSIZE];
-	struct foodle_cart_t cart;
-	struct foodle_item_t item;
 	struct foodle_order_t order;
 	struct foodle_order_t order_list[MAXSIZE];
 	struct foodle_delivery_t delivery;
@@ -96,26 +97,22 @@ union foodle_data_u {
 };
 
 enum foodle_event_type_e {
-	AUTHENTICATE_ACCOUNT,
-	GET_ACCOUNT,
-	UPDATE_ACCOUNT,
-	DELETE_ACCOUNT,
+	AUTHENTICATE_USER,
+	GET_USER_INFO,
+	UPDATE_USER_INFO,
+	DELETE_USER_INFO,
 
-	GET_ORDER_LIST,
-	SELECT_ORDER,
-	FINISH_ORDER,
-
-	GET_MENU,
 	ADD_MEAL,
 	UPDATE_MEAL,
 	DELETE_MEAL,
 
 	GET_RESTAURANT_LIST,
-	VIEW_CART,
-	ADD_ITEM,
-	UPDATE_ITEM,
-	DELETE_ITEM,
+	GET_MENU,
 	ORDER_CART,
+	
+	GET_ORDER_LIST,
+	SELECT_ORDER,
+	FINISH_ORDER,
 
 	GET_DELIVERY_LIST,
 	CHOOSE_DELIVERY,
@@ -128,4 +125,4 @@ struct foodle_event_t {
 	union foodle_data_u data;
 };
 
-#endif // FOODLE_CLIENT_TYPES_H__
+#endif // FOODLE_CLIENT_TYPES_H
