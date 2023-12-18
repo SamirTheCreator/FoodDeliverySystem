@@ -17,46 +17,44 @@ void viewCart(void)
 		printf("%d. %s\n", i+1, data.order.cart.item[i].meal.name);
 }
 
-struct foodle_restaurant_t* getRestaurantList(void)
+int getRestaurantList(char *category)
 {
 	event.type = GET_RESTAURANT_LIST;
 
 	if (send(server_socket, &event, sizeof(event), 0) == 0)
-		return NULL;
+		return 0;
 
 	if (recv(server_socket, &data, sizeof(data), MSG_WAITALL) == 0)
-		return NULL;
+		return 0;
 
-	return data.restaurant_list;
+	return 1;
 }
 
-struct foodle_menu_t getMenu(int restaurantID)
+int getMenu(int restaurantID)
 {
 	event.type = GET_MENU;
 	event.data.restaurant.ID = restaurantID;
 
 	if (send(server_socket, &event, sizeof(event), 0) == 0)
-		return (struct foodle_menu_t){};
+		return 0;
 
 	if (recv(server_socket, &data, sizeof(data), MSG_WAITALL) == 0)
-		return (struct foodle_menu_t){};
+		return 0;
 
-	return data.menu;
+	return 1;
 }
 
-struct foodle_order_t orderCart(int customerID, struct foodle_order_t order, char *address)
+int orderCart(struct foodle_order_t order)
 {
 	event.type = ORDER_CART;
-	event.data.order.customerID = customerID;
-	event.data.order.cart = order.cart;
-	strcpy(event.data.order.address, address);
+	event.data.order = order;
 
 	if (send(server_socket, &event, sizeof(event), 0) == 0)
-		return (struct foodle_order_t){};
+		return 0;
 
 	if (recv(server_socket, &data, sizeof(data), MSG_WAITALL) == 0)
-		return (struct foodle_order_t){};
+		return 0;
        
-	return data.order;
+	return 1;
 }
 

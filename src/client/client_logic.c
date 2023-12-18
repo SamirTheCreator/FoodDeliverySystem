@@ -1,15 +1,12 @@
 	struct foodle_user_t user;
 	while (true) {
-		char username[16];
-		char password[16];
-
 		printf("Enter username: ");
-		scanf("%s", username);
+		scanf("%s", user.name);
 		printf("Enter password: ");
-		scanf("%s", password);
+		scanf("%s", user.password);
 
-		authenticateUser(username, password);
-		user.ID = data.user.ID;
+		authenticateUser(user);
+		user = data.user;
 		if (user.ID != -1) {
 			printf("Authentication succeed.\n");
 			break;
@@ -43,7 +40,7 @@
 		{
 		case 1:
 		{
-			getUserInfo(user.ID);
+			getUserInfo(user);
 			user = data.user;
 			printf("\n--- User Information ---\n");
 			printf("User ID: %d\n", user.ID);
@@ -77,7 +74,10 @@
 		}
 		case 3:
 		{
-			getMenu(0);
+			int restaurantID;
+			printf("Enter restaurantID: ");
+			scanf("%d", &restaurantID);
+			getMenu(restaurantID);
 			menu = data.menu;
 			printf("\n\n--- Menu ---\n");
 			for (int i = 0; i < MAXSIZE; i++) {

@@ -2,10 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 #include "handlers.h"
+#include "../foodle_db/foodle_db.h"
 
 extern struct foodle_event_t event;
 extern union foodle_data_u data;
 
+extern MYSQL *con;
 //Database on server
 char *user_types[3] = { "Restaurant", "Customer", "Dasher" };
 struct foodle_menu_t menu;
@@ -206,8 +208,7 @@ int getRestaurantList(struct foodle_event_t *event) { printf("Handling event typ
 int getMenu(struct foodle_event_t *event)
 {
 	printf("    Handling event type GET_MENU\n");
-	
-	data.menu = menu;
+	foodle_db_get_menu(con, event->data.restaurant.ID);
 }
 
 int orderCart(struct foodle_event_t *event) { printf("    Handling event type ORDER_CART\n"); }

@@ -13,10 +13,10 @@ int deleteMeal(int mealID, int restaurantID);
 int updateMeal(int mealID, char* meal_name, float price, int restaurantID);
 //Updates information about meals in the given menu. Returns 1 if the information is successfully updated in the menu, 0 otherwise.
 
-struct foodle_order_t* getOrderList(void);
+int getOrderList(void);
 //Retrieves a list of pending orders for the restaurant. Returns a pointer to the array of struct Order elements. Null on failure.
 
-struct foodle_order_t selectOrder(int orderID);
+int selectOrder(int orderID);
 //Selects a pending order to perform actions on. Returns Order if order is successfully selected, 0 otherwise.
 
 int finishOrder(int orderID);

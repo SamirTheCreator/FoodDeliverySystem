@@ -1,5 +1,5 @@
-#ifndef FOODLE_CLIENT_TYPES_H
-#define FOODLE_CLIENT_TYPES_H
+#ifndef FOODLE_TYPES_H
+#define FOODLE_TYPES_H
 
 #define str(x) #x
 #define MAXSIZE 255
@@ -29,6 +29,7 @@ struct foodle_meal_t {
 	int ID;
 	string name;
 	float price;
+	string image_path;
 };
 
 struct foodle_menu_t {
@@ -45,7 +46,6 @@ struct foodle_restaurant_t {
 
 struct foodle_item_t {
 	struct foodle_meal_t meal;
-	string image_path;
 	int quantity;
 	float net_price;
 };
@@ -77,9 +77,6 @@ struct foodle_order_t {
 	string status;
 	string address;
 	string date;
-	time_t avg_preparation_time;
-	time_t avg_delivery_time;
-	time_t avg_arrival_time;
 	struct foodle_cart_t cart;
 };
 
@@ -125,4 +122,4 @@ struct foodle_event_t {
 	union foodle_data_u data;
 };
 
-#endif // FOODLE_CLIENT_TYPES_H
+#endif // FOODLE_TYPES_H

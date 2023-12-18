@@ -1,23 +1,18 @@
-#ifndef USER_H
-#define USER_H
+#ifndef ACCOUNT_H
+#define ACCOUNT_H
 
 //Authenticates the user account credentials using username and password. Uses the single-factor authentication.
-//Returns 1 if authentication is successful, 0 otherwise.
-int authenticateUser(char *name, char *password);
+//Retreives userID andfrom database with to data.user.ID 
+int authenticateUser(struct foodle_user_t user);
 
-/* manageUser functions */
+//Retrieves  account information with specific userID.
+int getUserInfo(struct foodle_user_t user);
 
-//Retrieves and displays the account information with specific clientID.
-//Returns 1 on success, 0 otherwise.
-int getUserInfo(int userID);
-
-//Allows the user to modify their account details with specific clientID.
-//Returns 1 on success, 0 otherwise.
+//Allows the user to modify their account details with specific userID.
 int updateUserInfo(struct foodle_user_t user);
 
 //Deletes the user account with a specific clientID.
-//Returns 1 on success, 0 otherwise.
-int deleteUserInfo(int userID);
+int deleteUserInfo(struct foodle_user_t user);
 
-#endif //USER_H
+#endif //ACCOUNT_H
 

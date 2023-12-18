@@ -6,6 +6,7 @@
 #include <pthread.h>    //pthread_t, pthread_create(), pthread_join()
 #include <semaphore.h>  //sem_t, sem_init(), sem_wait(), sem_post(), sem_destroy()
 #include <errno.h>      //perror()
+#include <mysql.h>		//MYSQL
 
 //inet_addr(), socket(), connect()
 //struct sockaddr_in, AF_INET, SOCK_STREAM
@@ -13,6 +14,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 
+#include "../foodle_db/foodle_db.h"
 #include "foodle_types.h"
 
 #define MAXCLIENTS 10
@@ -28,6 +30,7 @@ extern int handleEvent(struct Handler *chain, struct foodle_event_t *event);
 struct foodle_event_t event;
 union foodle_data_u data;
 
+MYSQL *con;
 int server_sock;
 sem_t mutex;
 
@@ -88,7 +91,7 @@ int main(int argc, char * argv[])
 	pthread_t tid[MAXCLIENTS];
 	struct Handler *chain;
  
- 	//MYSQL *con = foodle_db_init();
+ 	con = foodle_db_init();
  
 	server_sock = socket(AF_INET, SOCK_STREAM, 0);
 	if (server_sock < 0) {
