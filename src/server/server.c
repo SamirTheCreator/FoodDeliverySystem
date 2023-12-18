@@ -49,7 +49,7 @@ void* client_handler(void *vargp)
 	client_socket = thread_args.client_socket;
 	chain = thread_args.chain;
 	
-	printf("[+] Thread for client #%d was created\n", client_socket - 3);
+	printf("[+] Thread for client #%d was created.\n", client_socket - 3);
 
 	while (1) {
 	  	//sem_wait(&mutex);
@@ -61,7 +61,7 @@ void* client_handler(void *vargp)
 			break;
 		}
 
-		printf("%d KB event was received from client #%d\n", bytes_received / 1024, client_socket - 3);
+		printf("    From Client #%d was reveived event (%d KB)\n", client_socket - 3, bytes_received / 1024);
 		memset(&data, 0, sizeof(data));
 		if (!handleEvent(chain, &event))
 			printf("[?] Failed to handle event\n");
@@ -79,7 +79,7 @@ int main(int argc, char * argv[])
 	signal(SIGINT, sig_handler);
 	
 	//char *ip = "127.0.0.1";
-	int port = 8080;
+	int port = 8888;
  
 	int client_socket[MAXCLIENTS];
 	struct sockaddr_in server_addr, client_addr;

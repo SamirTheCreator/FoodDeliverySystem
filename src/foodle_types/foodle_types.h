@@ -1,7 +1,8 @@
 #ifndef FOODLE_CLIENT_TYPES_H
 #define FOODLE_CLIENT_TYPES_H
 
-#define MAXSIZE 32
+#define str(x) #x
+#define MAXSIZE 255
 
 typedef char string[MAXSIZE];
 
@@ -12,12 +13,12 @@ enum foodle_user_type_e {
 };
 
 struct foodle_user_t {
-	int userID;
-	string email;
+	int ID;
+	string name;
 	string password;
 	enum foodle_user_type_e type;
-	string name;
-	string phone_number;
+	string email;
+	string phone;
 	string address;
 	string region;
 	string image_path;
@@ -25,15 +26,21 @@ struct foodle_user_t {
 };
 
 struct foodle_meal_t {
-	int mealID;
+	int ID;
 	string name;
 	float price;
 };
 
 struct foodle_menu_t {
-	int restaurantID;
-	string restaurant_name;
 	struct foodle_meal_t meal[MAXSIZE];
+};
+
+struct foodle_restaurant_t {
+	int ID;
+	string name;
+	string category;
+	struct foodle_menu_t menu;
+	string address;
 };
 
 struct foodle_item_t {
@@ -44,21 +51,12 @@ struct foodle_item_t {
 };
 
 struct foodle_cart_t {
-	int cartID;
 	struct foodle_item_t item[MAXSIZE];
 	int total_price;
 };
 
-struct foodle_restaurant_t {
-	int restaurantID;
-	string name;
-	string category;
-	string address;
-};
-
 struct foodle_delivery_t {
 	int orderID;
-	string meal_category;
 	string restaurant_address;
 	string customer_address;
 };
@@ -72,11 +70,11 @@ enum foodle_order_status_e {
 };
 
 struct foodle_order_t {
-	int orderID;
+	int ID;
 	int customerID;
 	int restaurantID;
 	int dasherID;
-	enum foodle_order_status_e status;
+	string status;
 	string address;
 	string date;
 	time_t avg_preparation_time;
@@ -104,6 +102,7 @@ enum foodle_event_type_e {
 	DELETE_USER_INFO,
 
 	ADD_MEAL,
+	GET_MEAL,
 	UPDATE_MEAL,
 	DELETE_MEAL,
 

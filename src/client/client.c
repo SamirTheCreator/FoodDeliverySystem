@@ -1,7 +1,8 @@
 #include <stdio.h>      //printf()
 #include <stdlib.h>     //exit()
 #include <string.h>     //memset()
-#include <unistd.h>     //close()
+#include <unistd.h>     //close(), sleep()
+#include <stdbool.h>    //true
 
 //inet_addr(), socket(), connect()
 //struct sockaddr_in, AF_INET, SOCK_STREAM
@@ -29,32 +30,33 @@ int main(int argc, char * argv[])
 	
 	server_socket = socket(AF_INET, SOCK_STREAM, 0);
 	if (server_socket < 0) {
-		perror("Socket for server wasn't created");
+		perror("[!] Socket for server wasn't created");
 		exit(1);
 	}
-	printf("TCP socket for server was created.\n");
+	printf("[+] TCP socket for server was created.\n");
 
 	memset(&addr, '\0', sizeof(addr));
 	addr.sin_family = AF_INET;
 	addr.sin_port = port;
 	addr.sin_addr.s_addr = INADDR_ANY;
 
-	if (connect(server_socket, (struct sockaddr *)&addr, sizeof(addr)) < 0)
+	if (connect(server_socket, (struct sockaddr *)&addr, sizeof(addr)) < 0)	{
+		perror("[!] Failed to connect to the server");
 		exit(1);
-	printf("Connected to the server.\n");
+	}
+	printf("[+] Connected to the server.\n");
 		
 		
 	/////////////////////////////////////////////////////////
-	//Here you write your logic for client
-	#include "authorization.c"
+	#include "client_logic.c"
 	////////////////////////////////////////////////////////
 
 	
-	if (close(server_socket) < 0)	{
-		perror("Server socket was not closed");
+	if (close(server_socket) < 0) {
+		perror("[!] Server socket was not closed");
 		exit(1);
 	}
-	printf("Disconnected from the server.\n");
+	printf("[-] Disconnected from the server.\n");
 
 	return 0;
 }

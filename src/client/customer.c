@@ -33,7 +33,7 @@ struct foodle_restaurant_t* getRestaurantList(void)
 struct foodle_menu_t getMenu(int restaurantID)
 {
 	event.type = GET_MENU;
-	event.data.restaurant.restaurantID = restaurantID;
+	event.data.restaurant.ID = restaurantID;
 
 	if (send(server_socket, &event, sizeof(event), 0) == 0)
 		return (struct foodle_menu_t){};

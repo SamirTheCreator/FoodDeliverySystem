@@ -26,7 +26,7 @@ struct foodle_delivery_t chooseDelivery(int dasherID, int orderID)
 {
 	event.type = CHOOSE_DELIVERY;
 	event.data.order.dasherID = dasherID;
-	event.data.order.orderID = orderID;
+	event.data.order.ID = orderID;
 
 	if (send(server_socket, &event, sizeof(event), 0) == 0)
 		return (struct foodle_delivery_t){};
@@ -41,7 +41,7 @@ int withdrawDelivery(int dasherID, int orderID)
 {
 	event.type = WITHDRAW_DELIVERY;
 	event.data.order.dasherID = dasherID;
-	event.data.order.orderID = orderID;
+	event.data.order.ID = orderID;
 
 	if (send(server_socket, &event, sizeof event, 0) == 0)
 		return 0;
@@ -56,7 +56,7 @@ int finishDelivery(int dasherID, int orderID)
 {
 	event.type = FINISH_DELIVERY;
 	event.data.order.dasherID = dasherID;
-	event.data.order.orderID = orderID;
+	event.data.order.ID = orderID;
 
 	if (send(server_socket, &event, sizeof(event), 0) == 0)
 		return 0;

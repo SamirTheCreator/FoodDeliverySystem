@@ -9,39 +9,31 @@ extern int server_socket;
 extern struct foodle_event_t event;
 extern union foodle_data_u data;
 
-int authenticateAccount(char *name, char *password)
+int authenticateUser(char *name, char *password)
 {
-	event.type = AUTHENTICATE_ACCOUNT;
-	strcpy(event.data.account.name, name);
-	strcpy(event.data.account.password, password);
+	memset(&event, 0, sizeof(event));
+	memset(&data, 0, sizeof(data));
+
+	event.type = AUTHENTICATE_USER;
+	strcpy(event.data.user.name, name);
+	strcpy(event.data.user.password, password);
 
 	if (send(server_socket, &event, sizeof(event), 0) == 0)
 		return 0;
-
-	if (recv(server_socket, &data, sizeof(data), 0) == 0)
-		return 0;
-
-	return data.account.clientID;
-}
-
-struct foodle_account_t getAccount(int clientID)
-{
-	event.type = GET_ACCOUNT;
-	event.data.account.clientID = clientID;
-
-	if (send(server_socket, &event, sizeof(event), 0) == 0)
-		return (struct foodle_account_t){};
 
 	if (recv(server_socket, &data, sizeof(data), MSG_WAITALL) == 0)
-		return (struct foodle_account_t){};
+		return 0;
 
-	return data.account;
+	return data.user.ID;
 }
 
-int updateAccount(struct foodle_account_t account)
+int getUserInfo(int userID)
 {
-	event.type = UPDATE_ACCOUNT;
-	event.data.account = account;
+	memset(&event, 0, sizeof(event));
+	memset(&data, 0, sizeof(data));
+	
+	event.type = GET_USER_INFO;
+	event.data.user.ID = userID;
 
 	if (send(server_socket, &event, sizeof(event), 0) == 0)
 		return 0;
@@ -52,10 +44,30 @@ int updateAccount(struct foodle_account_t account)
 	return 1;
 }
 
-int deleteAccount(int clientID)
+int updateUserInfo(struct foodle_user_t user)
 {
-	event.type = DELETE_ACCOUNT;
-	event.data.account.clientID = clientID;
+	memset(&event, 0, sizeof(event));
+	memset(&data, 0, sizeof(data));
+	
+	event.type = UPDATE_USER_INFO;
+	event.data.user = user;
+
+	if (send(server_socket, &event, sizeof(event), 0) == 0)
+		return 0;
+
+	if (recv(server_socket, &data, sizeof(data), MSG_WAITALL) == 0)
+		return 0;
+
+	return 1;
+}
+
+int deleteUserInfo(int userID)
+{
+	memset(&event, 0, sizeof(event));
+	memset(&data, 0, sizeof(data));
+	
+	event.type = DELETE_USER_INFO;
+	event.data.user.ID = userID;
 
 	if (send(server_socket, &event, sizeof(event), 0) == 0)
 		return 0;

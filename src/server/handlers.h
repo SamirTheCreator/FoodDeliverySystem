@@ -17,6 +17,7 @@ int updateUserInfo(struct foodle_event_t *event);
 int deleteUserInfo(struct foodle_event_t *event);
 
 int addMeal(struct foodle_event_t *event);
+int getMeal(struct foodle_event_t *event);
 int updateMeal(struct foodle_event_t *event);
 int deleteMeal(struct foodle_event_t *event);
 

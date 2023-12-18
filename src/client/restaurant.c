@@ -15,7 +15,7 @@ int addMeal(char *meal_name, float price, int restaurantID)
 	memset(&data, 0, sizeof(data));
 	
 	event.type = ADD_MEAL;
-	event.data.restaurant.restaurantID = restaurantID;
+	event.data.restaurant.ID = restaurantID;
 	strcpy(event.data.meal.name, meal_name);
 	event.data.meal.price = price;
 
@@ -25,7 +25,25 @@ int addMeal(char *meal_name, float price, int restaurantID)
 	if (recv(server_socket, &data, sizeof(data), MSG_WAITALL) == 0)
 		return 0;
 
-	return data.meal.mealID;
+	return data.meal.ID;
+}
+
+int getMeal(int mealID, int restaurantID)
+{
+	memset(&event, 0, sizeof(event));
+	memset(&data, 0, sizeof(data));
+	
+	event.type = GET_MEAL;
+	event.data.restaurant.ID = restaurantID;
+	event.data.meal.ID = mealID;
+
+	if (send(server_socket, &event, sizeof(event), 0) == 0)
+		return 0;
+
+	if (recv(server_socket, &data, sizeof(data), MSG_WAITALL) == 0)
+		return 0;
+
+	return data.meal.ID;
 }
 
 int updateMeal(int mealID, char* meal_name, float price, int restaurantID)
@@ -34,8 +52,8 @@ int updateMeal(int mealID, char* meal_name, float price, int restaurantID)
 	memset(&data, 0, sizeof(data));
 	
 	event.type = UPDATE_MEAL;
-	event.data.restaurant.restaurantID = restaurantID;
-	event.data.meal.mealID = mealID;
+	event.data.restaurant.ID = restaurantID;
+	event.data.meal.ID = mealID;
 	strcpy(event.data.meal.name, meal_name);
 	event.data.meal.price = price;
 	
@@ -54,7 +72,7 @@ int deleteMeal(int mealID, int restaurantID)
 	memset(&data, 0, sizeof(data));
 	
 	event.type = DELETE_MEAL;
-	event.data.meal.mealID = mealID;
+	event.data.meal.ID = mealID;
 
 	if (send(server_socket, &event, sizeof(event), 0) == 0)
 		return 0;
@@ -87,8 +105,8 @@ struct foodle_order_t selectOrder(int orderID)
 	memset(&data, 0, sizeof(data));
 	
 	event.type = SELECT_ORDER;
-	event.data.order.orderID = orderID;
-	event.data.order.status = Preparing;
+	event.data.order.ID = orderID;
+	strcpy(event.data.order.status, str(Preparing));
 
 	if (send(server_socket, &event, sizeof(event), 0) == 0)
 		return (struct foodle_order_t){};
@@ -105,7 +123,7 @@ int finishOrder(int orderID)
 	memset(&data, 0, sizeof(data));
 	
 	event.type = FINISH_ORDER;
-	event.data.order.orderID = orderID;
+	event.data.order.ID = orderID;
     
 	if (send(server_socket, &event, sizeof(event), 0) == 0)
 		return 0;

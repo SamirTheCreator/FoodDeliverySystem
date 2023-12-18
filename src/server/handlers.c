@@ -1,15 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <mysql/mysql.h>
 #include "handlers.h"
 
 extern struct foodle_event_t event;
 extern union foodle_data_u data;
 
 //Database on server
-char *names[] = { "restaurant", "customer", "dasher" };
-struct foodle_menu_t menu = { .restaurantID = 0, .restaurant_name = "Restaurant"};
+char *user_types[3] = { "Restaurant", "Customer", "Dasher" };
+struct foodle_menu_t menu;
 struct foodle_user_t user[10];
 static int mealID;
 static int userID;
@@ -30,6 +29,7 @@ struct fooodle_handler_t* initChainedHandler()
 	addHandler(chain, DELETE_USER_INFO, deleteUserInfo);
 	
 	addHandler(chain, ADD_MEAL, addMeal);
+	addHandler(chain, GET_MEAL, getMeal);
 	addHandler(chain, UPDATE_MEAL, updateMeal);
 	addHandler(chain, DELETE_MEAL, deleteMeal);
 	
@@ -77,17 +77,19 @@ int handleEvent(struct fooodle_handler_t *chain, struct foodle_event_t *event)
 //and parse retreived table or json file to union data
 int authenticateUser(struct foodle_event_t *event)
 {
-	printf("Handling event type AUTHENTICATE_USER\n");
+	printf("    Handling event type AUTHENTICATE_USER\n");
 	
 	if (strcmp(event->data.user.name, "restaurant")) {
-		data.user.userID = -1;
+		data.user.ID = -1;
+		user[userID].type = -1;
 		return 1;
 	}
 	
-	user[userID].userID = userID;
+	user[userID].ID = userID;
 	strcpy(user[userID].name, event->data.user.name);
 	strcpy(user[userID].password, event->data.user.password);
-	data.user.userID = userID;
+	user[userID].type = Restaurant;
+	data.user.ID = userID;
 	userID++;
 	
 	return 1;
@@ -95,51 +97,59 @@ int authenticateUser(struct foodle_event_t *event)
 
 int getUserInfo(struct foodle_event_t *event)
 {
-	printf("Handling event type GET_USER_INFO\n");
+	printf("    Handling event type GET_USER_INFO\n");
 
-	data.user = user[event->data.user.userID];
+	data.user = user[event->data.user.ID];
 	
 	return 1;
 }
 
 int updateUserInfo(struct foodle_event_t *event)
 {
-	printf("Handling event type UPDATE_USER_INFO\n");
+	printf("    Handling event type UPDATE_USER_INFO\n");
 	
-	strcpy(user[event->data.user.userID].email, event->data.user.email);
-	strcpy(user[event->data.user.userID].password, event->data.user.password);
-	user[event->data.user.userID].type = Restaurant;
-	strcpy(user[event->data.user.userID].name, event->data.user.name);
-	strcpy(user[event->data.user.userID].phone_number, event->data.user.phone_number);
-	strcpy(user[event->data.user.userID].address, event->data.user.address);
-	strcpy(user[event->data.user.userID].region, event->data.user.region);
-	data.user = user[event->data.user.userID];
+	strcpy(user[event->data.user.ID].email, event->data.user.email);
+	strcpy(user[event->data.user.ID].password, event->data.user.password);
+	user[event->data.user.ID].type = Restaurant;
+	strcpy(user[event->data.user.ID].name, event->data.user.name);
+	strcpy(user[event->data.user.ID].phone, event->data.user.phone);
+	strcpy(user[event->data.user.ID].address, event->data.user.address);
+	strcpy(user[event->data.user.ID].region, event->data.user.region);
+	data.user = user[event->data.user.ID];
 
 	return 1;
 }
 
 int deleteUserInfo(struct foodle_event_t *event)
 {
-	printf("Handling event type DELETE_USER_INFO\n");
+	printf("    Handling event type DELETE_USER_INFO\n");
 	
-	strcpy(user[event->data.user.userID].email, "");
-	strcpy(user[event->data.user.userID].password, "");
-	user[event->data.user.userID].type = -1;
-	strcpy(user[event->data.user.userID].name, "");
-	strcpy(user[event->data.user.userID].phone_number, "");
-	strcpy(user[event->data.user.userID].address, "");
-	strcpy(user[event->data.user.userID].region, "");
+	strcpy(user[event->data.user.ID].email, "");
+	strcpy(user[event->data.user.ID].password, "");
+	user[event->data.user.ID].type = -1;
+	strcpy(user[event->data.user.ID].name, "");
+	strcpy(user[event->data.user.ID].phone, "");
+	strcpy(user[event->data.user.ID].address, "");
+	strcpy(user[event->data.user.ID].region, "");
 	data.user = user[userID];
 	
 	return 1;
 }
 
+int getMeal(struct foodle_event_t *event)
+{
+	printf("    Handling event type GET_MEAL\n");
+	
+	data.meal = menu.meal[event->data.meal.ID];
+	
+	return 1;
+}
 
 int addMeal(struct foodle_event_t *event)
 {
-	printf("Handling event type ADD_MEAL\n");
+	printf("    Handling event type ADD_MEAL\n");
 	
-	menu.meal[mealID].mealID = mealID;
+	menu.meal[mealID].ID = mealID;
 	strcpy(menu.meal[mealID].name, event->data.meal.name);
 	menu.meal[mealID].price = event->data.meal.price;
 	data.meal = menu.meal[mealID];
@@ -150,23 +160,23 @@ int addMeal(struct foodle_event_t *event)
 
 int updateMeal(struct foodle_event_t *event)
 {
-	printf("Handling event type UPDATE_MEAL\n");
+	printf("    Handling event type UPDATE_MEAL\n");
 	
-	strcpy(menu.meal[event->data.meal.mealID].name, event->data.meal.name);
-	menu.meal[event->data.meal.mealID].price = event->data.meal.price;
-	data.meal = menu.meal[event->data.meal.mealID];
+	strcpy(menu.meal[event->data.meal.ID].name, event->data.meal.name);
+	menu.meal[event->data.meal.ID].price = event->data.meal.price;
+	data.meal = menu.meal[event->data.meal.ID];
 	
 	return 1;
 }
 
 int deleteMeal(struct foodle_event_t *event)
 {
-	printf("Handling event type DELETE_MEAL\n");
+	printf("    Handling event type DELETE_MEAL\n");
 	
-	menu.meal[event->data.meal.mealID].mealID = -1;
-	strcpy(menu.meal[event->data.meal.mealID].name, "");
-	menu.meal[event->data.meal.mealID].price = 0;
-	data.meal = menu.meal[event->data.meal.mealID];
+	menu.meal[event->data.meal.ID].ID = -1;
+	strcpy(menu.meal[event->data.meal.ID].name, "");
+	menu.meal[event->data.meal.ID].price = -1;
+	data.meal = menu.meal[event->data.meal.ID];
 	mealID--;
 	
 	return 1;
@@ -174,33 +184,35 @@ int deleteMeal(struct foodle_event_t *event)
 
 int getOrderList(struct foodle_event_t *event)
 {
-	printf("Handling event type GET_ORDER_LIST\n");
+	printf("    Handling event type GET_ORDER_LIST\n");
 	data.order_list[0] = (struct foodle_order_t){};
 }
 
 int selectOrder(struct foodle_event_t *event)
 {
-	printf("Handling event type SELECT_ORDER\n");
+	printf("    Handling event type SELECT_ORDER\n");
 	data.order.restaurantID = 1;
-	data.order.status = Preparing;
+	strcpy(data.order.status, str(Preparing));
 }
 
 int finishOrder(struct foodle_event_t *event)
 {
-	printf("Handling event FINISH_ORDER\n");
-	data.order.status = Finished;
+	printf("    Handling event FINISH_ORDER\n");
+	strcpy(data.order.status, str(Finished));
 }
 
 int getRestaurantList(struct foodle_event_t *event) { printf("Handling event type GET_RESTAURANT_LIST\n"); }
+
 int getMenu(struct foodle_event_t *event)
 {
-	printf("Handling event type GET_MENU\n");
-	data.menu.restaurantID = 1;
+	printf("    Handling event type GET_MENU\n");
+	
+	data.menu = menu;
 }
-int orderCart(struct foodle_event_t *event) { printf("Handling event type ORDER_CART\n"); }
 
-int getDeliveryList(struct foodle_event_t *event) { printf("Handling event type GET_DELIVERY_LIST\n"); }
-int chooseDelivery(struct foodle_event_t *event) { printf("Handling event type CHOOSE_DELIVERY\n"); }
+int orderCart(struct foodle_event_t *event) { printf("    Handling event type ORDER_CART\n"); }
+int getDeliveryList(struct foodle_event_t *event) { printf("    Handling event type GET_DELIVERY_LIST\n"); }
+int chooseDelivery(struct foodle_event_t *event) { printf("    Handling event type CHOOSE_DELIVERY\n"); }
 int withdrawDelivery(struct foodle_event_t *event) { printf("Handling event type WITHDRAW_DELIVERY\n"); }
 int finishDelivery(struct foodle_event_t *event) { printf("Handling event type FINISH_DELIVERY\n"); }
 

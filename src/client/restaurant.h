@@ -4,6 +4,9 @@
 int addMeal(char* meal_name, float price, int restaurantID);
 //Adds a meal to the menu of a given restaurant. Returns mealID if the meal is successfully added, 0 otherwise.
 
+int getMeal(int mealID, int restaurantID);
+//Gets a meal from the menu of a given restaurant. Returns 1 if the meal is successfully got, 0 otherwise.
+
 int deleteMeal(int mealID, int restaurantID);
 //Deletes a meal from the menu of a given restaurant. Returns 1 if the meal is successfully removed, 0 otherwise.
 
