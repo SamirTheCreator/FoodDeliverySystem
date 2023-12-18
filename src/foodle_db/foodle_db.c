@@ -146,6 +146,16 @@ int foodle_db_update_meal_bystruct(MYSQL *con, struct foodle_meal_t *meal) {
 	return 1;
 }
 
+int foodle_db_delete_meal_byid(MYSQL *con, int id) {
+	char query[200];
+	sprintf(query, "DELETE FROM menu WHERE menu_id=%d", id);
+	if (mysql_query(con, query)) {
+		fprintf(stderr, "%s\n", mysql_error(con));
+		return 0;
+	}
+	return 1;
+}
+
 
 // Main only for testing the library
 int main (int argc, char **argv) {
