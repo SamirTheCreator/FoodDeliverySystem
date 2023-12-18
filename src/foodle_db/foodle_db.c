@@ -18,9 +18,8 @@ MYSQL* foodle_db_init(void) {
       		exit(1);
   	}
 
-	if (mysql_real_connect(con, FOODLE_DB_HOST, FOODLE_DB_USER, FOODLE_DB_PASS, FOODLE_DB_DATABASE, 0, NULL, 0) == NULL) {
+	if (mysql_real_connect(con, FOODLE_DB_HOST, FOODLE_DB_USER, FOODLE_DB_PASS, FOODLE_DB_DATABASE, 0, NULL, 0) == NULL)
 		finish_with_error(con);
-	}
     
     printf("Connected to database\n");
 
@@ -36,18 +35,16 @@ void foodle_db_add_user(MYSQL *con, struct foodle_user_t *user) {
 
 	sprintf(query, "INSERT INTO user VALUES(NULL, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')", user->name, user->phone, user->email, user->password, user->address, u_type, user->region, user->image_path, user->delivery_type);
 
-	if (mysql_query(con, query)) {
+	if (mysql_query(con, query))
 		finish_with_error(con);
-	}
 }
 
 void foodle_db_add_meal(MYSQL *con, struct foodle_meal_t *meal) {
 	char query[200];
 	sprintf(query, "INSERT INTO menu VALUES(NULL, %d, %s, %f, %s)", meal->ID, meal->name, meal->price, meal->image_path);
 
-	if (mysql_query(con, query)) {
+	if (mysql_query(con, query))
 		finish_with_error(con);
-	}
 }
 
 struct foodle_user_t foodle_db_get_user_byemail(MYSQL *con, char *email) {
@@ -55,14 +52,12 @@ struct foodle_user_t foodle_db_get_user_byemail(MYSQL *con, char *email) {
 	struct foodle_user_t user;
 
 	sprintf(query, "SELECT * FROM user WHERE email='%s'", email);
-	if (mysql_query(con, query)) {
+	if (mysql_query(con, query))
 		finish_with_error(con);
-	}
 
 	MYSQL_RES *result = mysql_store_result(con);
-	if (result == NULL) {
+	if (result == NULL)
 		finish_with_error(con);
-	}
 
 	MYSQL_ROW row = mysql_fetch_row(result);
     if (row) {
@@ -78,9 +73,8 @@ struct foodle_user_t foodle_db_get_user_byemail(MYSQL *con, char *email) {
         strcpy(user.region, row[7]);
         strcpy(user.image_path, row[8]);
         strcpy(user.delivery_type, row[9]);
-    } else {
+    } else
         user.ID = -1;
-    }
 	
 	mysql_free_result(result);
     return user;
@@ -93,14 +87,12 @@ struct foodle_meal_t* foodle_db_get_menu(MYSQL *con, int id) {
 	int i=0;
 
 	sprintf(query, "SELECT * FROM menu WHERE restaurant_id=%d", id);
-	if (mysql_query(con, query)) {
+	if (mysql_query(con, query))
 		finish_with_error(con);
-	}
 
 	MYSQL_RES *result = mysql_store_result(con);
-	if (result == NULL) {
+	if (result == NULL)
 		finish_with_error(con);
-	}
 
 	MYSQL_ROW row;
 	while ((row = mysql_fetch_row(result)) && i < 20) {
@@ -118,14 +110,12 @@ struct foodle_meal_t foodle_db_get_meal_byid(MYSQL *con, int id) {
 	struct foodle_meal_t meal;
 
 	sprintf(query, "SELECT * FROM menu WHERE menu_id=%d", id);
-	if (mysql_query(con, query)) {
+	if (mysql_query(con, query))
 		finish_with_error(con);
-	}
 
 	MYSQL_RES *result = mysql_store_result(con);
-	if (result == NULL) {
+	if (result == NULL)
 		finish_with_error(con);
-	}
 	
 	MYSQL_ROW row = mysql_fetch_row(result);
 	meal.ID = atoi(row[0]);
@@ -168,9 +158,8 @@ struct foodle_user_t* foodle_db_get_restaurants(MYSQL* con) {
 	}
 
 	MYSQL_RES *result = mysql_store_result(con);
-	if (result == NULL) {
+	if (result == NULL)
 		finish_with_error(con);
-	}
 
 	MYSQL_ROW row;
 	int i=0;
