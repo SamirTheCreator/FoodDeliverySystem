@@ -192,6 +192,10 @@ struct foodle_user_t* foodle_db_get_restaurants(MYSQL* con) {
 	return rests;
 }
 
+void foodle_db_add_order(struct foodle_order_t order) {
+	
+}
+
 
 // Main only for testing the library
 int main (int argc, char **argv) {
