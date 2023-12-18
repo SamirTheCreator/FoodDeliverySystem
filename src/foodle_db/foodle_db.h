@@ -21,9 +21,9 @@ void foodle_db_add_user(
 * @desc Function to initialize database connection
 * @return A pointer to MYSQL connection
 */
-void foodle_db_add_item(
+void foodle_db_add_meal(
     MYSQL *con, 
-    struct foodle_item_t *item
+    struct foodle_meal_t *item
 );
 
 /*
@@ -43,10 +43,10 @@ struct foodle_user_t foodle_db_get_user_byemail(
 * @return A pointer to dynamically allocated (heap),
 * DON'T FORGET TO FREE POINTER!
 */
-struct foodle_item_t* foodle_db_get_menu(
+struct foodle_meal_t* foodle_db_get_menu(
     MYSQL *con, 
     int id
 );
 
 
-#endif FOODLE_DB_H_ // FOODLE_DB_H__
+#endif // FOODLE_DB_H__
