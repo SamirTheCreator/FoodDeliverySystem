@@ -106,29 +106,53 @@ struct foodle_meal_t* foodle_db_get_menu(MYSQL *con, int id) {
 
 	MYSQL_ROW row;
 	while ((row = mysql_fetch_row(result))) {
-		menu[i].ID = atoi(row[0]),
-		strcpy(menu[i].name, row[2]),
-		menu[i].price = atof(row[3]),
-		strcpy(menu[i].image_path, row[4]),
+		menu[i].ID = atoi(row[0]);
+		strcpy(menu[i].name, row[2]);
+		menu[i].price = atof(row[3]);
+		strcpy(menu[i].image_path, row[4]);
 		i++;
 	}
 	return menu;
 }
 
-void foodle_db_add_order(MYSQL* con, int *menu_id, int n) {
+struct foodle_meal_t foodle_db_get_meal_byid(MYSQL *con, int id) {
+	char query[200];
+	struct foodle_meal_t meal;
+
+	sprintf(query, "SELECT * FROM menu WHERE menu_id=%d", id);
+	if (mysql_query(con, query)) {
+		finish_with_error(con);
+	}
+
+	MYSQL_RES *result = mysql_store_result(con);
+	if (result == NULL) {
+		finish_with_error(con);
+	}
 	
+	MYSQL_ROW row = mysql_fetch_row(result);
+	meal.ID = atoi(row[0]);
+	strcpy(meal.name, row[2]);
+	meal.price = atof(row[3]);
+	strcpy(meal.image_path, row[4]);
+
+	return meal;
 }
 
 // Main only for testing the library
 int main (int argc, char **argv) {
 	MYSQL *con = foodle_db_init();
 	// How to get menu:
-	// struct foodle_item_t *menu = foodle_db_get_menu(con, 239);
-	// struct foodle_item_t *ptr;
-	// for (ptr = menu; ptr->itemID != 0; ptr++) {
-	// 	printf("%d, %s, %f, %s\n", ptr->itemID, ptr->name, ptr->price, ptr->image_path);
+	// struct foodle_meal_t *menu = foodle_db_get_menu(con, 239);
+	// struct foodle_meal_t *ptr;
+	// for (ptr = menu; ptr->ID != 0; ptr++) {
+	// 	printf("%d, %s, %f, %s\n", ptr->ID, ptr->name, ptr->price, ptr->image_path);
 	// }
 	// free(menu);
-	mysql_close(con);
+	// mysql_close(con);
+
+	struct foodle_meal_t meal = foodle_db_get_meal_byid(con, 414);
+	printf("%d, %s, %f, %s\n", meal.ID, meal.name, meal.price, meal.image_path);
+
+
 	exit(0);
 }
