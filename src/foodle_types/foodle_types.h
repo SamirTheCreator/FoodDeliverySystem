@@ -1,86 +1,86 @@
-#ifndef FOODLE_TYPES_H__
-#define FOODLE_TYPES_H__
+#ifndef FOODLE_TYPES_H
+#define FOODLE_TYPES_H
 
+#define str(x) #x
 #define MAXSIZE 255
 
-// Reviewed
+typedef char string[MAXSIZE];
+
 enum foodle_user_type_e {
-	Restaurant = 0, 
-	Customer = 1,
-	Dasher = 2
+	Restaurant,
+	Customer,
+	Dasher
 };
 
-// Reviewed
 struct foodle_user_t {
-	int userID;
-	char name[MAXSIZE];
-	char phone_number[MAXSIZE];
-	char email[MAXSIZE];
-	char password[MAXSIZE];
-	char address[MAXSIZE];
-	enum foodle_user_type_e user_type;
-    char region[MAXSIZE];
-    char image_path[MAXSIZE];
-    char delivery_type[MAXSIZE];
+	int ID;
+	string name;
+	string password;
+	enum foodle_user_type_e type;
+	string email;
+	string phone;
+	string address;
+	string region;
+	string image_path;
+	string delivery_type;
 };
 
-// Reviewed
-struct foodle_item_t {
-	int itemID;
-	char name[MAXSIZE];
+struct foodle_meal_t {
+	int ID;
+	string name;
 	float price;
-	char image_path[MAXSIZE];
+	string image_path;
 };
 
-// Reviewed
+struct foodle_menu_t {
+	struct foodle_meal_t meal[MAXSIZE];
+};
+
+struct foodle_restaurant_t {
+	int ID;
+	string name;
+	struct foodle_menu_t menu;
+	string address;
+};
+
+struct foodle_item_t {
+	struct foodle_meal_t meal;
+	int quantity;
+	float net_price;
+};
+
 struct foodle_cart_t {
-	int cartID;
 	struct foodle_item_t item[MAXSIZE];
 	int total_price;
 };
 
-// ?
-struct foodle_meal_t {
-	int mealID;
-	char name[MAXSIZE];
-	float price;
-};
-
-// Why do we need restaurant name in menu?
-struct foodle_menu_t {
-	int restaurantID;
-	char restaurant_name[MAXSIZE];
-	struct foodle_meal_t meal[MAXSIZE];
-};
-
-// We have name here
-struct foodle_restaurant_t {
-	int restaurantID;
-	char name[MAXSIZE];
-	char category[MAXSIZE];
-	char address[MAXSIZE];
-};
-
 struct foodle_delivery_t {
 	int orderID;
-	char name[MAXSIZE];
-	char restaurant_address[MAXSIZE];
-	char customer_address[MAXSIZE];
+	string restaurant_address;
+	string customer_address;
+};
+
+enum foodle_order_status_e {
+	Pending,
+	Confirmed,
+	Preparing,
+	Delivering,
+	Finished
 };
 
 struct foodle_order_t {
-	int orderID;
+	int ID;
 	int customerID;
 	int restaurantID;
 	int dasherID;
-	char date[MAXSIZE];
-	char status[MAXSIZE];
+	string status;
+	string address;
+	string date;
+	struct foodle_cart_t cart;
 };
 
 union foodle_data_u {
-	struct foodle_user_t account;
-	struct foodle_cart_t cart;
-	struct foodle_item_t item;
+	struct foodle_user_t user;
 	struct foodle_menu_t menu;
 	struct foodle_meal_t meal;
 	struct foodle_restaurant_t restaurant;
@@ -92,26 +92,23 @@ union foodle_data_u {
 };
 
 enum foodle_event_type_e {
-	AUTHENTICATE_ACCOUNT,
-	GET_ACCOUNT,
-	UPDATE_ACCOUNT,
-	DELETE_ACCOUNT,
+	AUTHENTICATE_USER,
+	GET_USER_INFO,
+	UPDATE_USER_INFO,
+	DELETE_USER_INFO,
 
-	GET_ORDER_LIST,
-	SELECT_ORDER,
-	FINISH_ORDER,
-
-	GET_MENU,
 	ADD_MEAL,
+	GET_MEAL,
 	UPDATE_MEAL,
 	DELETE_MEAL,
 
 	GET_RESTAURANT_LIST,
-	VIEW_CART,
-	ADD_ITEM,
-	UPDATE_ITEM,
-	DELETE_ITEM,
+	GET_MENU,
 	ORDER_CART,
+	
+	GET_ORDER_LIST,
+	SELECT_ORDER,
+	FINISH_ORDER,
 
 	GET_DELIVERY_LIST,
 	CHOOSE_DELIVERY,
@@ -124,43 +121,4 @@ struct foodle_event_t {
 	union foodle_data_u data;
 };
 
-#endif // FOODLE_TYPES_H__
-
-
-
-/*
-
-cart:
-- orderID
-- customerID
-- itemID
-
-cart
-
-| orderID | customerID | menuID | quantity |
-|---------|------------|--------|----------|
-| 1       | 1          | 1      | 2        |
-| 1       | 1          | 2      | 1        |
-| 1       | 1          | 3      | 1        |
-| 2       | 1          | 1      | 1        |
-| 2       | 1          | 2      | 1        |
-| 2       | 1          | 3      | 1        |
-
-
-
-(customerid, restid, dasherid, "placed", menuid)
-
-
-void send_order() {
-query
-"INSERT INTO `order` (customer_id, restaurant_id, dasher_id, date, order_status) 
-VALUES (1, 2, 3, NOW(), 'Placed');
-)
-for (i : menuid):
-query (
-        "INSERT INTO order_meal (order_id, menu_id)
-        VALUES (LAST_INSERT_ID(), %i);
-        COMMIT;" 
-    )
-}
-*/
+#endif // FOODLE_TYPES_H
