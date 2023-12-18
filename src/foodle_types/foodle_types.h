@@ -44,7 +44,7 @@ struct foodle_restaurant_t {
 };
 
 struct foodle_item_t {
-	struct foodle_meal_t meal;
+	int meal_id;
 	int quantity;
 	float net_price;
 };
