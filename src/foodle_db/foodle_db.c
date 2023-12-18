@@ -103,7 +103,7 @@ struct foodle_meal_t* foodle_db_get_menu(MYSQL *con, int id) {
 	}
 
 	MYSQL_ROW row;
-	while ((row = mysql_fetch_row(result))) {
+	while ((row = mysql_fetch_row(result)) && i < 20) {
 		menu[i].ID = atoi(row[0]);
 		strcpy(menu[i].name, row[2]);
 		menu[i].price = atof(row[3]);
@@ -156,6 +156,42 @@ int foodle_db_delete_meal_byid(MYSQL *con, int id) {
 	return 1;
 }
 
+struct foodle_user_t* foodle_db_get_restaurants(MYSQL* con) {
+	char query[255];
+	struct foodle_user_t *rests = malloc(20*sizeof(struct foodle_user_t));
+	memset(rests, 0, 20*sizeof(struct foodle_user_t));
+
+	strcpy(query, "SELECT * FROM user WHERE user_type='Restaurant'");
+	if (mysql_query(con, query)) {
+		fprintf(stderr, "%s\n", mysql_error(con));
+		return NULL;
+	}
+
+	MYSQL_RES *result = mysql_store_result(con);
+	if (result == NULL) {
+		finish_with_error(con);
+	}
+
+	MYSQL_ROW row;
+	int i=0;
+	while ((row = mysql_fetch_row(result)) && i < 20) {
+		rests[i].ID = atoi(row[0]);
+        strcpy(rests[i].name, row[1]);
+        strcpy(rests[i].phone, row[2]);
+        strcpy(rests[i].email, row[3]);
+        strcpy(rests[i].password, row[4]);
+        strcpy(rests[i].address, row[5]);
+        if (strcmp(row[6], "Restaurant") == 0) rests[i].type = Restaurant;
+        else if (strcmp(row[6], "Dasher") == 0) rests[i].type = Dasher;
+        else rests[i].type = Customer;
+        strcpy(rests[i].region, row[7]);
+        strcpy(rests[i].image_path, row[8]);
+		i++;
+	}
+
+	return rests;
+}
+
 
 // Main only for testing the library
 int main (int argc, char **argv) {
@@ -182,6 +218,14 @@ int main (int argc, char **argv) {
 	// printf("%d\n", r);
 	// printf("%d, %s, %f, %s\n", newmeal.ID, newmeal.name, newmeal.price, newmeal.image_path);
 
+	//int r = foodle_db_delete_meal_byid(con, 414);
+
+	// struct foodle_user_t *rests = foodle_db_get_restaurants(con);
+	// struct foodle_user_t *ptr;
+	// printf("kffk");
+	// for (ptr = rests; ptr->ID != 0; ptr++) {
+	// 	printf("'%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s'\n)", ptr->name, ptr->phone, ptr->email, ptr->password, ptr->address, ptr->region, ptr->image_path, ptr->delivery_type);
+	// }
 
 	exit(0);
 }
