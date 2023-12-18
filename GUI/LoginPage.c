@@ -40,6 +40,7 @@ GtkBuilder  *builder;
 
 
 void on_RegisterButton_activate();
+void hide_status_label(GtkWidget *label);
 
 void freeze_sleep(int s)
 {
