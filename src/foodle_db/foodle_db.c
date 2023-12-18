@@ -43,8 +43,6 @@ void foodle_db_add_user(MYSQL *con, struct foodle_user_t *user) {
 
 void foodle_db_add_meal(MYSQL *con, struct foodle_meal_t *meal) {
 	char query[200];
-	char u_type[50];
-
 	sprintf(query, "INSERT INTO menu VALUES(NULL, %d, %s, %f, %s)", meal->ID, meal->name, meal->price, meal->image_path);
 
 	if (mysql_query(con, query)) {
@@ -138,6 +136,17 @@ struct foodle_meal_t foodle_db_get_meal_byid(MYSQL *con, int id) {
 	return meal;
 }
 
+int foodle_db_update_meal_bystruct(MYSQL *con, struct foodle_meal_t *meal) {
+	char query[200];
+	sprintf(query, "UPDATE menu SET item_name='%s', item_price=%f, item_image_path='%s' WHERE menu_id=%d", meal->name, meal->price, meal->image_path, meal->ID);
+	if (mysql_query(con, query)) {
+		fprintf(stderr, "%s\n", mysql_error(con));
+		return 0;
+	}
+	return 1;
+}
+
+
 // Main only for testing the library
 int main (int argc, char **argv) {
 	MYSQL *con = foodle_db_init();
@@ -150,8 +159,18 @@ int main (int argc, char **argv) {
 	// free(menu);
 	// mysql_close(con);
 
-	struct foodle_meal_t meal = foodle_db_get_meal_byid(con, 414);
-	printf("%d, %s, %f, %s\n", meal.ID, meal.name, meal.price, meal.image_path);
+	struct foodle_meal_t meal = {
+		.ID = 414,
+		.name = "Pizza but changed",
+		.image_path = "Hello",
+		.price = 91.91,
+	};
+
+	// int r = foodle_db_update_meal_bystruct(con, &meal);
+	// struct foodle_meal_t newmeal = foodle_db_get_meal_byid(con, 414);
+	// printf("%d, %s, %f, %s\n", meal.ID, meal.name, meal.price, meal.image_path);
+	// printf("%d\n", r);
+	// printf("%d, %s, %f, %s\n", newmeal.ID, newmeal.name, newmeal.price, newmeal.image_path);
 
 
 	exit(0);
