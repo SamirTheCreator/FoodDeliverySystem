@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Generated with glade 3.40.0 -->
+<interface>
+  <requires lib="gtk+" version="3.24"/>
+  <object class="GtkWindow">
+    <property name="can-focus">False</property>
+    <child>
+      <object class="GtkFixed">
+        <property name="visible">True</property>
+        <property name="can-focus">False</property>
+        <child>
+          <object class="GtkImage">
+            <property name="width-request">1440</property>
+            <property name="height-request">1024</property>
+            <property name="visible">True</property>
+            <property name="can-focus">False</property>
+            <property name="pixbuf">images/DeleteMeal.png</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkEntry">
+            <property name="width-request">500</property>
+            <property name="height-request">62</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+          </object>
+          <packing>
+            <property name="x">485</property>
+            <property name="y">431</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkEntry">
+            <property name="width-request">500</property>
+            <property name="height-request">62</property>
+            <property name="visible">True</property>
+            <property name="can-focus">True</property>
+          </object>
+          <packing>
+            <property name="x">485</property>
+            <property name="y">585</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
