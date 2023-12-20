@@ -7,12 +7,13 @@ DATABASE_SRC += \
 	$(SRC_DIR)/foodle_db/foodle_db.c
 
 SERVER_SRC += \
-	$(SRC_DIR)/server/server.c \
+	$(SRC_DIR)/server/main.c \
 	$(SRC_DIR)/server/handlers.c
 	
 
 CLIENT_SRC += \
 	$(SRC_DIR)/client/GUI/LoginPage.c \
+	$(SRC_DIR)/client/data_transfer.c \
 	$(SRC_DIR)/client/account.c \
 	$(SRC_DIR)/client/customer.c \
 	$(SRC_DIR)/client/restaurant.c \
@@ -34,7 +35,7 @@ CFLAGS += $(INC_PARAMS)
 CFLAGS += $(shell pkg-config --cflags mysqlclient)
 CFLAGS += $(shell pkg-config --libs mysqlclient)
 
-build: server client
+all: server client
 	@echo "Building project"
 
 server: mkdir
