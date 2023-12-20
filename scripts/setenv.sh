@@ -9,6 +9,11 @@ if [ $? -ne 0 ]; then
 	sudo apt install libgtk-3-0 libgtk-3-dev
 fi
 
+apt list --installed | grep -q libgtk-3-dev
+if [ $? -ne 0 ]; then
+	sudo apt install libgtk-3-dev
+fi
+
 if [ ! $(which make) ]; then
 	sudo apt install make
 fi
