@@ -22,7 +22,7 @@ if [ ! $(which pkg-config) ]; then
 fi
 
 if [ ! $(which mysql) ]; then
-	sudo apt install mysql-server libmysqlclient-dev &>/dev/null
+	sudo apt install mysql-server libmysqlclient-dev
 fi
 
 if [ $(echo $PWD | rev | cut -f1 -d/ | rev) = "scripts" ]; then
