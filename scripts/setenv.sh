@@ -1,8 +1,8 @@
 #!/bin/bash
 
-sudo echo "Setting up environment"
-sleep 3
-sudo apt update
+sudo echo -n "Setting up environment"; sleep 1; echo -n '.';
+sleep 1; echo -n '.'; sleep 1; echo -n '.'; sleep 1; echo '';
+sudo apt update && sudo apt upgrade
 
 apt list --installed | grep -q libgtk-3-0
 if [ $? -ne 0 ]; then
@@ -22,10 +22,14 @@ if [ ! $(which pkg-config) ]; then
 fi
 
 if [ ! $(which mysql) ]; then
-	sudo apt install mysql-server libmysqlclient-dev
+	sudo apt install mysql-server libmysqlclient-dev &>/dev/null
 fi
 
-if [ ! -f "../mysql/setDB.sql" -a -f "../mysql/DDL.sql" -a -f "../mysql/fillDB.sql" ]; then
+if [ $(echo $PWD | rev | cut -f1 -d/ | rev) = "scripts" ]; then
+	cd ..
+fi
+
+if [ ! -f "./mysql/setDB.sql" -a -f "./mysql/DDL.sql" -a -f "./mysql/fillDB.sql" ]; then
 	echo "Database configuration: SQL files in '../mysql/' were not found"
 	exit 1
 fi
@@ -43,9 +47,9 @@ if [ $? -ne 0 ]; then
 	fi
 fi
 
-sudo mysql <../mysql/setDB.sql
-mysql -uroot -p1234 Foodle_DB <../mysql/DDL.sql 2>/dev/null
-mysql -uroot -p1234 Foodle_DB <../mysql/fillDB.sql 2>/dev/null
+sudo mysql <./mysql/setDB.sql
+mysql -uroot -p1234 Foodle_DB <./mysql/DDL.sql 2>/dev/null
+mysql -uroot -p1234 Foodle_DB <./mysql/fillDB.sql 2>/dev/null
 
 echo "Environment is configured"
 
