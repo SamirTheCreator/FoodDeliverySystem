@@ -2,7 +2,7 @@
 Linux Desktop Application. OS Project
 
 ## Configuration
-Set up environment for build, run `./scripts/setenv.sh`
+Set up environment for build running `./scripts/setenv.sh`
 
 ## Build
 Build project with `make all` or `make` command
@@ -27,7 +27,7 @@ To reveal host IPv4 use command:
 Run server and client on different machines:
 `./build/server 8080 $(hostname -I)`
 `./build/client 8080 <SERVER_IPv4>`
-- <SERVER_IPv4> is printed as server runs
+- `<SERVER_IPv4>` is printed as server runs
 
 ##### Test
 Test phone and password: +998999686868 password
