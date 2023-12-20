@@ -18,8 +18,9 @@ void foodle_db_add_user(
 );
 
 /*
-* @desc Function to initialize database connection
-* @return A pointer to MYSQL connection
+* @desc Function to add menu item
+* @param[in] MYSQL *con - connection to database
+* @param[in] struct foodle_item_t *item - item to add
 */
 void foodle_db_add_meal(
     MYSQL *con, 
