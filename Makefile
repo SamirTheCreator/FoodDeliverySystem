@@ -20,11 +20,11 @@ CLIENT_SRC += \
 	$(SRC_DIR)/client/dasher.c
 
 # Include folders common to all targets
-INC_FOLDER += \
+INC_FOLDERS += \
 	$(SRC_DIR)/foodle_types \
 	$(SRC_DIR)/foodle_db
 
-INC_PARAMS=$(foreach d, $(INC_FOLDER), -I$d)
+INC_PARAMS=$(foreach d, $(INC_FOLDERS), -I$d)
 
 # Optimization flags
 OPT += -O3 -g3
