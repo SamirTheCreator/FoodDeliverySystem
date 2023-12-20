@@ -1,0 +1,8 @@
+START TRANSACTION;
+
+ALTER USER 'root'@'localhost' IDENTIFIED WITH caching_sha2_password BY '1234';
+
+DROP DATABASE IF EXISTS Foodle_DB;
+CREATE DATABASE Foodle_DB;
+
+COMMIT;
