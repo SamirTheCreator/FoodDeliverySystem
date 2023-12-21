@@ -1,4 +1,3 @@
-
 #include <stdlib.h>
 #include <sys/types.h>
 #include <signal.h>
@@ -13,8 +12,7 @@
 #include <stdio.h>      //printf()
 #include <stdlib.h>     //exit()
 #include <string.h>     //memset()
-#include <unistd.h>     //close(), sleep()
-#include <stdbool.h>    //true
+#include <unistd.h>     //close()
 
 //inet_addr(), socket(), connect()
 //struct sockaddr_in, AF_INET, SOCK_STREAM
@@ -31,6 +29,7 @@
 int server_socket;
 struct foodle_event_t event;
 union foodle_data_u data;
+int userID;
 
 GtkWidget   *window;
 GtkWidget   *fixed;
@@ -45,7 +44,11 @@ GtkWidget   *RestaurantButton;
 GtkWidget   *CustomerSubmitButton;
 GtkWidget   *DasherSubmitButton;
 GtkWidget   *RestaurantSubmitButton;
-
+GtkWidget   *ViewMenuButton;
+GtkWidget   *AddMealButton;
+GtkWidget   *DeleteMealButton;
+GtkWidget   *UpdateMealButton;
+GtkWidget	*AddMealSubmitButton;
 
 GtkWidget   *LoginField;
 GtkWidget   *PasswordField;
@@ -55,14 +58,19 @@ GtkWidget   *DeliveryTypeField;
 GtkWidget   *AddressField;
 GtkWidget   *Password1Field;
 GtkWidget   *Password2Field;
+GtkWidget   *MealNameField;
+GtkWidget   *MealPriceField;
+GtkWidget   *AddressField;
+GtkWidget   *MealCookingTimeField;
+GtkWidget   *MealImagePathField;
 
 GtkBuilder  *builder;
 
 
 
-
 void on_RegisterButton_activate();
 void hide_status_label(GtkWidget *label);
+void on_AddMealButton_activate();
 
 void freeze_sleep(int s)
 {
@@ -74,24 +82,134 @@ void freeze_sleep(int s)
 }
 
 
+//void on_ViewMealButton_activate(){}
+
+void on_AddMealSubmitButton_activate()
+{
+	const gchar *meal_name = gtk_entry_get_text(GTK_ENTRY(MealNameField));
+	const gchar *meal_price = gtk_entry_get_text(GTK_ENTRY(MealPriceField));
+	const gchar *cooking_time = gtk_entry_get_text(GTK_ENTRY(MealCookingTimeField));
+	const gchar *image_path = gtk_entry_get_text(GTK_ENTRY(MealImagePathField));
+	
+	g_print("\n--- Add meal window ---\n");
+    g_print("Meal name: %s\n", meal_name);
+    g_print("Meal price: %s\n", meal_price);
+    g_print("Cooking time: %s\n",cooking_time);
+    g_print("Image path: %s\n",image_path);
+    
+    addMeal(meal_name, meal_price, cooking_time, image_path, userID);
+    
+    GtkBuilder *new_builder = gtk_builder_new();
+    if (gtk_builder_add_from_file(new_builder, "RestaurantMenuPage.glade", NULL) == 0) {
+        g_error("Error loading New Glade file");
+        return;
+    }
+    
+    GtkWidget *new_window = GTK_WIDGET(gtk_builder_get_object(new_builder, "RestaurantMenuWindow"));
+
+    ViewMenuButton = GTK_WIDGET(gtk_builder_get_object(new_builder, "ViewMenuButton"));
+    g_signal_connect(ViewMenuButton, "clicked", G_CALLBACK(on_AddMealButton_activate), NULL);
+    
+    AddMealButton = GTK_WIDGET(gtk_builder_get_object(new_builder, "AddMealButton"));
+    g_signal_connect(AddMealButton, "clicked", G_CALLBACK(on_AddMealButton_activate), NULL);
+
+    DeleteMealButton = GTK_WIDGET(gtk_builder_get_object(new_builder, "DeleteMealButton"));
+    g_signal_connect(DeleteMealButton, "clicked", G_CALLBACK(on_AddMealButton_activate), NULL);
+    
+    UpdateMealButton = GTK_WIDGET(gtk_builder_get_object(new_builder, "UpdateMealButton"));
+    g_signal_connect(UpdateMealButton, "clicked", G_CALLBACK(on_AddMealButton_activate), NULL);
+    
+    gtk_widget_hide(window);
+
+    g_signal_connect(new_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+
+    gtk_widget_show_all(new_window);
+    window = new_window;
+    builder = new_builder;
+}
+
+void on_AddMealButton_activate()
+{
+
+    GtkBuilder *new_builder = gtk_builder_new();
+    
+    if (gtk_builder_add_from_file(new_builder, "AddMealPage.glade", NULL) == 0) {
+        g_error("Error loading New Glade file");
+        return;
+    }
+    
+    GtkWidget *new_window = GTK_WIDGET(gtk_builder_get_object(new_builder, "AddMenuWindow"));
+
+    gtk_widget_hide(window);
+
+    g_signal_connect(new_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+    
+    AddMealSubmitButton = GTK_WIDGET(gtk_builder_get_object(new_builder, "AddMealSubmitButton"));
+    g_signal_connect(AddMealSubmitButton, "clicked", G_CALLBACK(on_AddMealSubmitButton_activate), NULL);
+
+    MealNameField = GTK_WIDGET(gtk_builder_get_object(new_builder, "MealNameField"));
+    MealPriceField = GTK_WIDGET(gtk_builder_get_object(new_builder, "MealPriceField"));
+    MealCookingTimeField = GTK_WIDGET(gtk_builder_get_object(new_builder, "MealCookingTimeField"));
+    MealImagePathField = GTK_WIDGET(gtk_builder_get_object(new_builder, "MealImagePathField"));
+    
+    gtk_widget_show_all(new_window);
+    window = new_window;
+    builder = new_builder;
+}
+
+//void on_UpdateMealButton_activate(){}
+
+//void on_DeleteMealButton_activate(){}
 
 void on_SubmitButton_activate()
 {
     const gchar *login_text = gtk_entry_get_text(GTK_ENTRY(LoginField));
     const gchar *password_text = gtk_entry_get_text(GTK_ENTRY(PasswordField));
 
+	g_print("\n--- Registration window ---\n");
     g_print("Login: %s\n", login_text);
     g_print("Password: %s\n", password_text);
     
-    char phone[13], password[20];
-    strcpy(phone, login_text);
-    strcpy(password, password_text);
-    authenticateUser(phone, password);
+ 
+    authenticateUser(login_text, password_text);
     if (data.user.ID == -1) {
-    	printf("Authentication failed!\n");
+    	printf("\nAuthentication failed!\n");
     	return;
     }
-    	printf("Authentication succeed!\n");
+    userID = data.user.ID;
+    printf("\nAuthentication succeed!\n");
+    
+    
+    if (data.user.type == Restaurant)
+    {
+	   GtkBuilder *new_builder = gtk_builder_new();
+		if (gtk_builder_add_from_file(new_builder, "RestaurantMenuPage.glade", NULL) == 0) {
+		    g_error("Error loading New Glade file");
+		    return;
+		}
+    
+		GtkWidget *new_window = GTK_WIDGET(gtk_builder_get_object(new_builder, "RestaurantMenuWindow"));
+
+		ViewMenuButton = GTK_WIDGET(gtk_builder_get_object(new_builder, "ViewMenuButton"));
+		g_signal_connect(ViewMenuButton, "clicked", G_CALLBACK(on_AddMealButton_activate), NULL);
+		
+		AddMealButton = GTK_WIDGET(gtk_builder_get_object(new_builder, "AddMealButton"));
+		g_signal_connect(AddMealButton, "clicked", G_CALLBACK(on_AddMealButton_activate), NULL);
+
+		DeleteMealButton = GTK_WIDGET(gtk_builder_get_object(new_builder, "DeleteMealButton"));
+		g_signal_connect(DeleteMealButton, "clicked", G_CALLBACK(on_AddMealButton_activate), NULL);
+		
+		UpdateMealButton = GTK_WIDGET(gtk_builder_get_object(new_builder, "UpdateMealButton"));
+		g_signal_connect(UpdateMealButton, "clicked", G_CALLBACK(on_AddMealButton_activate), NULL);
+		
+		gtk_widget_hide(window);
+
+		g_signal_connect(new_window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+
+		gtk_widget_show_all(new_window);
+		window = new_window;
+		builder = new_builder;
+    }
 }
 
 void on_CustomerSubmitButton_activate()
@@ -102,6 +220,7 @@ void on_CustomerSubmitButton_activate()
     const gchar *password1 = gtk_entry_get_text(GTK_ENTRY(Password1Field));
     const gchar *password2 = gtk_entry_get_text(GTK_ENTRY(Password2Field));
 
+	g_print("\n--- Customer Information ---\n");
     g_print("Name: %s\n", name);
     g_print("Phone: %s\n", phone);
     g_print("Address: %s\n",address);
@@ -134,12 +253,15 @@ void on_CustomerSubmitButton_activate()
     gchar *new_text = "Registration Completed!";
 
 
-    if (strlen(name) == 0 || strlen(phone) == 0 || strlen(address) == 0 ||
-        strlen(password1) == 0 || strlen(password2) == 0) 
-    {
+    if ( !(strlen(name) && strlen(phone) && strlen(address) && strlen(password1) && strlen(password2))) {
     	new_text = "You have not been registered!";
         col = "red"; 
     }
+    else if (strncmp(password1, password2, 20) != 0) {
+    	new_text = "Passwords did not match!";
+        col = "red"; 
+    }
+    else addUserInfo(Customer, name, phone, address, "", password1);
 
     GdkRGBA color;
 
@@ -201,6 +323,7 @@ void on_DasherSubmitButton_activate()
     const gchar *password1 = gtk_entry_get_text(GTK_ENTRY(Password1Field));
     const gchar *password2 = gtk_entry_get_text(GTK_ENTRY(Password2Field));
 
+	g_print("\n--- Dasher Information ---\n");
     g_print("Name: %s\n", name);
     g_print("Phone: %s\n", phone);
     g_print("Address: %s\n",address);
@@ -234,12 +357,15 @@ void on_DasherSubmitButton_activate()
     gchar *new_text = "Registration Completed!";
 
 
-    if (strlen(name) == 0 || strlen(phone) == 0 || strlen(address) == 0 ||
-    strlen(type) == 0 || strlen(password1) == 0 || strlen(password2) == 0) 
-    {
+    if ( !(strlen(name) && strlen(phone) && strlen(address) && strlen(password1) && strlen(password2))) {
     	new_text = "You have not been registered!";
         col = "red"; 
     }
+    else if (strncmp(password1, password2, 20) != 0) {
+    	new_text = "Passwords did not match!";
+        col = "red"; 
+    }
+    else addUserInfo(Dasher, name, phone, address, type, password1);
 
     GdkRGBA color;
 
@@ -302,14 +428,13 @@ void on_RestaurantSubmitButton_activate()
     const gchar *name = gtk_entry_get_text(GTK_ENTRY(NameField));
     const gchar *phone = gtk_entry_get_text(GTK_ENTRY(PhoneField));
     const gchar *address = gtk_entry_get_text(GTK_ENTRY(AddressField));
-    const gchar *type = gtk_entry_get_text(GTK_ENTRY(DeliveryTypeField));
     const gchar *password1 = gtk_entry_get_text(GTK_ENTRY(Password1Field));
     const gchar *password2 = gtk_entry_get_text(GTK_ENTRY(Password2Field));
 
+	g_print("\n--- Restaurant Information ---\n");
     g_print("Name: %s\n", name);
     g_print("Phone: %s\n", phone);
     g_print("Address: %s\n",address);
-    g_print("Delivery Type Field: %s\n", type);
     g_print("Password1: %s\n",password1);
     g_print("Password2: %s\n",password2);
     
@@ -339,12 +464,15 @@ void on_RestaurantSubmitButton_activate()
     gchar *new_text = "Registration Completed!";
 
 
-    if (strlen(name) == 0 || strlen(phone) == 0 || strlen(address) == 0 ||
-    strlen(type) == 0 || strlen(password1) == 0 || strlen(password2) == 0) 
-    {
+    if ( !(strlen(name) && strlen(phone) && strlen(address) && strlen(password1) && strlen(password2))) {
     	new_text = "You have not been registered!";
         col = "red"; 
     }
+    else if (strncmp(password1, password2, 20) != 0) {
+    	new_text = "Passwords did not match!";
+        col = "red"; 
+    }
+    else addUserInfo(Restaurant, name, phone, address, "", password1);
 
     GdkRGBA color;
 
@@ -389,7 +517,6 @@ void on_RestaurantButton_activate()
     NameField = GTK_WIDGET(gtk_builder_get_object(new_builder, "NameField"));
     PhoneField = GTK_WIDGET(gtk_builder_get_object(new_builder, "PhoneField"));
     AddressField = GTK_WIDGET(gtk_builder_get_object(new_builder, "AddressField"));
-    DeliveryTypeField = GTK_WIDGET(gtk_builder_get_object(new_builder, "DeliveryTypeField"));
     Password1Field = GTK_WIDGET(gtk_builder_get_object(new_builder, "Password1Field"));
     Password2Field = GTK_WIDGET(gtk_builder_get_object(new_builder, "Password2Field"));
 

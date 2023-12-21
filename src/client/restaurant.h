@@ -1,7 +1,7 @@
 #ifndef RESTAURANT_H
 #define RESTAURANT_H
 
-int addMeal(char* meal_name, float price, int restaurantID);
+int addMeal(const char *meal_name, const char *price, const char *time, const char *path, int restaurantID);
 //Adds a meal to the menu of a given restaurant. Returns mealID if the meal is successfully added, 0 otherwise.
 
 int getMeal(int mealID, int restaurantID);

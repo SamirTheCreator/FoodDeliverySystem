@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 #include "foodle_types.h"
 #include "data_transfer.h"
@@ -8,7 +9,7 @@
 extern struct foodle_event_t event;
 extern union foodle_data_u data;
 
-int addMeal(char *meal_name, float price, int restaurantID)
+int addMeal(const char *meal_name, const char *price, const char *time, const char *path, int restaurantID)
 {
 	memset(&event, 0, sizeof(event));
 	memset(&data, 0, sizeof(data));
@@ -16,7 +17,9 @@ int addMeal(char *meal_name, float price, int restaurantID)
 	event.type = ADD_MEAL;
 	event.data.restaurant.ID = restaurantID;
 	strcpy(event.data.meal.name, meal_name);
-	event.data.meal.price = price;
+	event.data.meal.price = atof(price);
+	strcpy(event.data.meal.image_path, path);
+	char arr[MAXSIZE]; strcpy(arr, time);
 
 	return transfer(&event, &data);
 }
